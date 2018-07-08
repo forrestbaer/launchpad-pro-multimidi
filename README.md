@@ -1,8 +1,17 @@
 [![Build Status](https://travis-ci.org/dvhdr/launchpad-pro.svg?branch=master)](https://travis-ci.org/dvhdr/launchpad-pro)
 
-# Launchpad Pro
-Open source firmware for the Novation Launchpad Pro grid controller!  By customising this code, you can:
+# Launchpad Pro MultiMIDI
+## DigiPADr - The Refactor
 
+Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on Atomic Design principals for:
+
+- Providing guidance to structuring code in the form of
+- Atoms: the parts that make up the precise, myopic core functionality (going deeper than buttons because that's all LPP is): visual, time, midi, function
+- Molecules: Buttons/Pads (the basic unit on LPP), Music Constructs, Time Constructs, IO
+- Organisms: Sets of Pads, Sets of Time, and Sets of Data
+- Environments: "Pages" or Surfaces, State, and Overlays (the Top Level Units)
+
+With this structure you can focus more on creating:
 - Implement your own unique standalone apps
 - Create chorders, sequencers, light shows, games and more
 - Have fun!
@@ -10,6 +19,11 @@ Open source firmware for the Novation Launchpad Pro grid controller!  By customi
 You'll definitely need *some* C programming experience, but we've deliberately kept much of the firmwarey nastiness tucked away, to make the process a little friendlier.
 
 # Philosophy
+
+In Atomic Design the "button" for example, is an Atom. But with a Launchpad Pro, since a button or pad is almost the only level of UI, we break down what goes into a button as the Atoms, which build up a button/pad as a molecule rich with functionality.
+
+## Firmware Code notes:
+
 We could have released the full source for the factory shipping firmware, but we decided not to for a variety of reasons.  Instead, we created a simplified framework for developing "apps" on Launchpad Pro, which comprises a build environment, application entry points / API, and a library of low level source code.  Our reasoning is as follows:
 
 - There is no value in customising low level routines such as LED multiplexing or ADC scanning - this code has been carefully tweaked over many months to deliver the best results, and is not something you'd want to mess with.

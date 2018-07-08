@@ -2,7 +2,8 @@ BUILDDIR = build
 
 TOOLS = tools
 
-SOURCES += src/app.c src/atoms/function/delve.c src/atoms/midi/noteon.c src/atoms/time/step.c src/atoms/visual/color.c src/atoms/visual/light.c
+SOURCES += src/app.c src/atoms/function/cc_func.c src/atoms/function/delve.c src/atoms/function/drum.c src/atoms/function/note_func.c src/atoms/function/pc_func.c src/atoms/function/phrase.c
+SOURCES += src/atoms/midi/aftertouch.c src/atoms/midi/cc.c src/atoms/midi/note.c src/atoms/midi/pc.c src/atoms/midi/sysex.c src/atoms/time/step.c src/atoms/time/loopevent.c src/atoms/visual/color.c src/atoms/visual/light.c
 SOURCES += src/environment/overlay.c src/environment/state.c src/environment/surface.c
 SOURCES += src/molecules/music/diatonic.c src/molecules/time/animation.c src/molecules/time/loop.c src/molecules/time/sequence.c src/molecules/event.c src/molecules/external_input.c src/molecules/pad.c
 SOURCES += src/organisms/visual/areaset.c src/organisms/visual/columnset.c src/organisms/visual/rowset.c src/organisms/timer.c src/organisms/valuestore.c
