@@ -2,7 +2,7 @@ BUILDDIR = build
 
 TOOLS = tools
 
-SOURCES += src/app.c
+SOURCES += src/app.c src/atoms/visual/light.c src/atoms/visual/color.c
 
 INCLUDES += -Iinclude -I
 
