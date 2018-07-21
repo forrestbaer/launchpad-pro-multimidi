@@ -27,6 +27,10 @@ void state_play(StateEvent msg) {
     }
     return;
   }
+  if (msg == EVENT_INPUT) {
+    transition_state( state_transit );
+    return;
+  }
   if (msg == EVENT_CLOCK) {
     tempCount++;
     if (tempCount > 60) { tempCount = 0; }
@@ -46,6 +50,10 @@ void state_off(StateEvent msg) {
   if (msg == EVENT_ENTER) {
     current_state = LP_OFF_MODE; // for side queries of state...?
     hal_plot_led(TYPEPAD, 13, 33, 0, 44);
+    return;
+  }
+  if (msg == EVENT_INPUT) {
+    transition_state( state_play );
     return;
   }
   if (msg == EVENT_CLOCK) {

@@ -66,7 +66,7 @@ void app_surface_event(u8 type, u8 index, u8 value)
         case  TYPEPAD:
         {
             if ( value > 0 ) {
-                transition_state( state_transit );
+                (*stateMachine)(EVENT_INPUT);
             }
             // toggle it and store it off, so we can save to flash if we want to
             // if (value)

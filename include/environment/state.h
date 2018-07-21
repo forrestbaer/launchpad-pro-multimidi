@@ -40,6 +40,7 @@ typedef enum
 {
     EVENT_ENTER,
     EVENT_EXIT,
+    EVENT_INPUT,
     EVENT_CLOCK,
     EVENT_MSG_COUNT
 } StateEvent;
