@@ -1,10 +1,10 @@
 #ifndef timer_h
 #define timer_h
-
 /*
- maybe elevate to environment?
-
  handles the master clock and time event loop
 */
+#include <math.h>
+
+void core_clock();
 
 #endif /* timer_h */

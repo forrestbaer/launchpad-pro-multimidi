@@ -1,18 +1,16 @@
 #ifndef state_h
 #define state_h
 
-//The concept of the whole app is simpler and yet more advanced and complete:
-/*
-There is still the master state of the app, but more importantly the grid is set up as
-An Array of 100 (?98?) Pointers to Functions & An Array of 100 (98?) Colors (a few are blank?!?! or used as other holders of info)
-<< This could fall under surface.h and .c >>
-Use this kind...to assign but do it in an array
-    // 2.5 calling a function using a function pointer
-    int result1 = pt2Function    (12, 'a', 'b');          // C short way
-    int result2 = (*pt2Function) (12, 'a', 'b');          // C
-Also see http://www.newty.de/fpt/fpt.html#chapter2  at 2.8... but that's confusing and I think it's easier than that.
+#include "app.h"
 
-Separate States may become less important as Every State will be the same type of thing
+//The concept of the whole app is simpler and yet more direct and adaptive:
+/*
+There is now an improved master state of the app: A State Machine, fully plumbed,
+Also key to this program:
+An Array of 100 (?98?) Pointers to Functions & An Array of 100 (98?) Colors !!! YES!! Clean! Perfection!
+(surface.c)
+
+Separate States may become less important (still important!) as Every State will be the same type of thing
 ...basically an open area where all the functions are available
 Some actions may change just 1 rowset or areaset instead of the whole Page
 
@@ -29,11 +27,38 @@ Next tie a music function to these actions.
 Then build out real system.
 */
 
-// let's do a proper state machine on this one.... debating to do it simple or for real.  Accessibility vs. Sophistication
-// if simple, could use state in 2 places: Action based and Timer based. Something tells me the simple way will still get spagetti code.
+/// Enum representing the different program states.
+typedef enum
+{
+    LP_PLAY_MODE,
+    LP_OFF_MODE,
+    LP_OVERLAY_MODE,
+    LP_NUM_MODES
+} LpState;
 
-// on enter
-// while in
-// on exit
+typedef enum
+{
+    EVENT_ENTER,
+    EVENT_EXIT,
+    EVENT_CLOCK,
+    EVENT_MSG_COUNT
+} StateEvent;
+
+//states
+void state_play(StateEvent msg);
+void state_off(StateEvent msg);
+void state_overlay(StateEvent msg);
+void state_transit(StateEvent msg);
+
+extern LpState current_state; // What mode the program is in
+//extern void (*stateMachine)( void (*funcIn)(StateEvent), LpState state );
+
+extern void (*stateMachine)(StateEvent);
+
+extern u8 tempCount;
+
+// quite a useful method. We pass in the function (pointer) for State Change, then tell it a state to change to
+// I think we will also add substate to tell it what Instrument to change to but maybe the function will say
+void transition_state(void (*funcIn)(StateEvent));
 
 #endif /* state_h */
