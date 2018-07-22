@@ -36,7 +36,17 @@ void test(uint8_t const jump_index)
 // ! But I may need to have the array not static and outside function... maybe more "dangerous" but should be ok.
 */
 extern color grid_colors[BUTTON_COUNT];
+//extern void (*grid_func[BUTTON_COUNT])(void);
+extern void (*grid_func[BUTTON_COUNT])(u8, u8);
+
+void DoMore(u8 setting, u8 index, u8 value);
+void FilledDoMore(u8 index, u8 value);
+
+void DoLess(u8 setting, u8 index, u8 value);
+void FilledDoLess(u8 index, u8 value);
 
 void prep_surface();
+
+//void fna();
 
 #endif /* surface_h */

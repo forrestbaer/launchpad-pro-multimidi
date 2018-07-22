@@ -46,20 +46,19 @@ typedef enum
 } StateEvent;
 
 //states
-void state_play(StateEvent msg);
-void state_off(StateEvent msg);
-void state_overlay(StateEvent msg);
-void state_transit(StateEvent msg);
+void state_play(StateEvent msg, u8 index, u8 value);
+void state_off(StateEvent msg, u8 index, u8 value);
+void state_overlay(StateEvent msg, u8 index, u8 value);
+void state_transit(StateEvent msg, u8 index, u8 value);
 
 extern LpState current_state; // What mode the program is in
-//extern void (*stateMachine)( void (*funcIn)(StateEvent), LpState state );
 
-extern void (*stateMachine)(StateEvent);
+extern void (*stateMachine)(StateEvent, u8, u8);
 
 extern u8 tempCount;
 
 // quite a useful method. We pass in the function (pointer) for State Change, then tell it a state to change to
 // I think we will also add substate to tell it what Instrument to change to but maybe the function will say
-void transition_state(void (*funcIn)(StateEvent));
+void transition_state(void (*funcIn)(StateEvent, u8, u8));
 
 #endif /* state_h */
