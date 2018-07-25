@@ -37,8 +37,8 @@ void state_play(StateEvent msg, u8 index, u8 value) {
   }
   if (msg == EVENT_CLOCK) {
     tempCount++;
-    if (tempCount > 60) { tempCount = 0; }
-    color clr = colorRanger( tempCount, 1 );
+    if (tempCount > 127) { tempCount = 0; }
+    color clr = colorRanger( tempCount, 2 );
     hal_plot_led(TYPEPAD, 88, clr.r, clr.g, clr.b);
     return;
   }
@@ -64,7 +64,7 @@ void state_off(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_CLOCK) {
     tempCount++;
     if (tempCount > 127)  { tempCount = 0; }
-    color clr = colorRanger( tempCount, 1 );
+    color clr = colorRanger( ledloop(tempCount), 2 );
     hal_plot_led(TYPEPAD, 88, clr.r, clr.g, clr.b);
     return;
   }

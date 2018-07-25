@@ -39,6 +39,7 @@ extern color grid_colors[BUTTON_COUNT];
 //extern void (*grid_func[BUTTON_COUNT])(void);
 extern void (*grid_func[BUTTON_COUNT])(u8, u8);
 
+void recrsvDirFill(u8 dirInt, u8 index, u8 recrsvDepth);
 void DoMore(u8 setting, u8 index, u8 value);
 void FilledDoMore(u8 index, u8 value);
 

@@ -1,6 +1,7 @@
 #ifndef pad_h
 #define pad_h
 
+#include "app.h"
 
 #define LP_FIRST_BUTTON (1)
 #define LP_LAST_BUTTON  (98)
@@ -54,5 +55,20 @@
 #define LAST_PAD  (FIRST_PAD + GRID_SIZE * ROW_SIZE - (ROW_GAP + 1))
 
 #define BUTTON_COUNT 100
+
+typedef enum
+{
+    DIR_TL,
+    DIR_UP,
+    DIR_TR,
+    DIR_RIGHT,
+    DIR_BR,
+    DIR_DOWN,
+    DIR_BL,
+    DIR_LEFT,
+    DIR_NUM
+} Direction;
+
+u8 directional(Direction whichDir, u8 fromPad);
 
 #endif /* pad_h */

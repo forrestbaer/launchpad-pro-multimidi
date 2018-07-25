@@ -11,5 +11,6 @@ typedef struct {
 } color;
 
 color colorRanger(u8 input, u8 type);
+color color8(u8 input, u8 type);
 
 #endif /* color_h */

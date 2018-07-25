@@ -5,6 +5,8 @@
 */
 #include <math.h>
 
+extern u8 animCnt;
+
 void core_clock();
 
 #endif /* timer_h */
