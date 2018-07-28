@@ -1,9 +1,10 @@
 #include "environment/surface.h"
 #include "molecules/visual/pad.h"
 #include "environment/timer.h"
+#include "atoms/visual/particle.h"
 
 color grid_colors[BUTTON_COUNT] = {{0,0,0}};
-
+particle particles[64] = {{0,0,0,0,0}};
 void (*grid_func[BUTTON_COUNT])(u8, u8) = {NULL};
 
 // PLEASE NOTE: All of this is here TEMP to Test out the Complex Array of Functional Pointers. It will be broken into better
@@ -56,30 +57,19 @@ void FilledDoMore(u8 index, u8 value) {  // This is to demo that a broad functio
 }
 
 void DoLess(u8 setting, u8 index, u8 value) {
-    if ( value > 0 ) {
-      hal_plot_led(TYPEPAD, index, 0, value / 4, value / 2 );
-
-      recrsvDirFill(DIR_UP, index, 0);
-
-      // u8 rtnPad = directional(DIR_UP, index);
-      // if (rtnPad != 0) {  // duh, make recursive function!
-      //   color clr = colorRanger(animCnt, 2);
-      //   hal_plot_led(TYPEPAD, rtnPad, clr.r, clr.g, clr.b );
-      //   u8 rtnPad2 = directional(DIR_UP, rtnPad);
-      //   if (rtnPad2 != 0) {
-      //     clr = colorRanger(animCnt+20, 2);
-      //     hal_plot_led(TYPEPAD, rtnPad2, clr.r, clr.g, clr.b );
-      //     u8 rtnPad3 = directional(DIR_UP, rtnPad2);
-      //     if (rtnPad3 != 0) {
-      //       clr = colorRanger(animCnt+40, 2);
-      //       hal_plot_led(TYPEPAD, rtnPad3, clr.r, clr.g, clr.b );
-      //     }
-      //   }
-      // }
-
-    } else {
-      hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b );
-      // this doesn't clear the left over Paint Up stuff
+    // if ( value > 0 ) {
+    //   hal_plot_led(TYPEPAD, index, 0, value / 4, value / 2 );
+    //   recrsvDirFill(DIR_UP, index, 0);
+    // } else {
+    //   hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b );
+    //   // this doesn't clear the left over Paint Up stuff
+    // }
+    if (value > 0 ) {
+      for ( u8 idx = 0; idx < 8; idx++) {
+        color clr = color8(idx, 0);
+        particle p = {directional(idx, index), clr.r * value / 63, clr.g * value / 63, clr.b * value / 63, idx};
+        addParticle(p);
+      }
     }
 }
 
@@ -88,15 +78,15 @@ void FilledDoLess(u8 index, u8 value) {
 }
 
 void prep_surface () {
-  for (int i=0; i < 10; ++i) {
-      for (int j=0; j < 10; ++j) {
-          color clr = {j*2, i*2, i+j};
-          grid_colors[j*10 + i] = clr;
-          grid_func[j*10 + i] = &FilledDoMore;
-      }
-  }
-  grid_func[44] = &FilledDoLess;
-  grid_func[55] = &FilledDoLess;
-  grid_func[66] = &FilledDoLess;
-  grid_func[11] = &FilledDoLess;
+    for (int i=0; i < 10; ++i) {
+        for (int j=0; j < 10; ++j) {
+            color clr = {j*2, i*2, i+j};
+            grid_colors[j*10 + i] = clr;
+            grid_func[j*10 + i] = &FilledDoMore;
+        }
+    }
+    grid_func[44] = &FilledDoLess;
+    grid_func[55] = &FilledDoLess;
+    grid_func[66] = &FilledDoLess;
+    grid_func[11] = &FilledDoLess;
 }
