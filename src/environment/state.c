@@ -4,35 +4,36 @@
 #include "environment/surface.h"
 #include "molecules/time/animation.h"
 #include "atoms/visual/color.h"
+#include "atoms/function/clear_func.h"
+#include "atoms/function/mode_func.h"
 
 LpState current_state = LP_PLAY_MODE;
 
 u8 tempCount = 0;
 
+// new idea for some states: play state vs build state... can build custom playing surface then play it.
+
 void state_play(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_EXIT) {
     // this function is going to live on a different level, but the types of things it would do are...
-    // kill_channel_notes(0);
-    // clear_leds();
-    hal_plot_led(TYPEPAD, 12, 44, 0, 0);
+    kill_channel_notes(0);
+    clear_leds();
+    clear_all_functions();
     return;
   }
   if (msg == EVENT_ENTER) {
     current_state = LP_PLAY_MODE; // for side queries of state...timer?
-    hal_plot_led(TYPEPAD, 11, 0, 0, 44);
-    for (int i=0; i < 10; ++i) {
-        for (int j=0; j < 10; ++j) {
-            color clr = grid_colors[j*10 + i];
-            hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b);
-        }
-    }
+    prep_surface();
     return;
   }
   if (msg == EVENT_INPUT) {
-    //color clr = colorRanger( value, 0 );
-    //hal_plot_led(TYPEPAD, index, clr.r, clr.g, clr.b);
     (*grid_func[index])(index, value);
-    //transition_state( state_transit );
+    return;
+  }
+  if (msg == EVENT_PRESSURE) {  // this is cool, moving this to state too, then aftertouch only happens when in right state
+    hal_send_midi(USBMIDI, POLYAFTERTOUCH | 0, index, value);
+    (*grid_pres[index])(index, value);
+    
     return;
   }
   if (msg == EVENT_CLOCK) {
@@ -40,32 +41,44 @@ void state_play(StateEvent msg, u8 index, u8 value) {
     if (tempCount > 127) { tempCount = 0; }
     color clr = colorRanger( tempCount, 2 );
     hal_plot_led(TYPEPAD, 88, clr.r, clr.g, clr.b);
+    color clr2 = colorRanger( ledloop(tempCount), 1 );
+    hal_plot_led(TYPEPAD, 18, clr2.r, clr2.g, clr2.b);
+    color clr3 = colorRanger( ledloop(tempCount), 0 );
+    hal_plot_led(TYPEPAD, 81, clr3.r, clr3.g, clr3.b);
+    color clr4 = colorRanger( ledloop(tempCount), 3 );
+    hal_plot_led(TYPEPAD, 11, clr4.r, clr4.g, clr4.b);
+
+    //didn't get this to work yet...whatevez 4 now.
+    // grid_colors[91] = colorRotator(grid_colors[91], 1);
+    // hal_plot_led(TYPEPAD, 91, grid_colors[91].r, grid_colors[91].g, grid_colors[91].b);
     return;
   }
 }
 
 void state_off(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_EXIT) {
-    // this function is going to live on a different level, but the types of things it would do are...
-    // kill_channel_notes(0);
-    // clear_leds();
-    hal_plot_led(TYPEPAD, 14, 0, 33, 0);
+    kill_channel_notes(0);
+    clear_leds();
+    clear_all_functions();
     return;
   }
   if (msg == EVENT_ENTER) {
     current_state = LP_OFF_MODE; // for side queries of state...?
-    hal_plot_led(TYPEPAD, 13, 33, 0, 44);
     return;
   }
   if (msg == EVENT_INPUT) {
-    transition_state( state_play );
+    //transition_state( state_play );
     return;
   }
   if (msg == EVENT_CLOCK) {
     tempCount++;
-    if (tempCount > 127)  { tempCount = 0; }
-    color clr = colorRanger( ledloop(tempCount), 2 );
-    hal_plot_led(TYPEPAD, 88, clr.r, clr.g, clr.b);
+    if (tempCount > 127) { tempCount = 0; }
+    for (u8 fdx = 0; fdx < 100; fdx++) {  // this should rainbow animate the whole screen in a rough layout.
+        u8 tempModCount = tempCount + fdx;
+        if ( tempModCount > 127 ) { tempModCount -= 127; }
+        color clr = colorRanger( tempModCount, 2 );
+        hal_plot_led(TYPEPAD, fdx, clr.r, clr.g, clr.b);
+    }
     return;
   }
 }
@@ -94,7 +107,6 @@ void state_overlay(StateEvent msg, u8 index, u8 value) {
 
 void state_transit(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_EXIT) {
-
     return;
   }
   if (msg == EVENT_ENTER) {

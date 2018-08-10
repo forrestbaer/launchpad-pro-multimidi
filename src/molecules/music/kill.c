@@ -1,7 +1,8 @@
 #include "molecules/music/kill.h"
+#include "atoms/midi/midi.h"
 
 void kill_channel_notes( u8 midichannel ) {
-  // midi_both_nonloop(CC | channel_lookup(midichannel), 123, 0 );
+  midi_both(CC | midichannel, 123, 0 );
   // pads_held_count = 0;
 }
 

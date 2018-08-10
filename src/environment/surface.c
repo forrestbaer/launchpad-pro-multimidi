@@ -2,10 +2,13 @@
 #include "molecules/visual/pad.h"
 #include "environment/timer.h"
 #include "atoms/visual/particle.h"
+#include "atoms/visual/pressure.h"
+#include "atoms/midi/midi.h"
 
 color grid_colors[BUTTON_COUNT] = {{0,0,0}};
-particle particles[64] = {{0,0,0,0,0}};
+particle particles[64] = {{0,0,0,0,0,0,0}};
 void (*grid_func[BUTTON_COUNT])(u8, u8) = {NULL};
+void (*grid_pres[BUTTON_COUNT])(u8, u8) = {NULL};
 
 // PLEASE NOTE: All of this is here TEMP to Test out the Complex Array of Functional Pointers. It will be broken into better
 // Categories next!
@@ -57,17 +60,10 @@ void FilledDoMore(u8 index, u8 value) {  // This is to demo that a broad functio
 }
 
 void DoLess(u8 setting, u8 index, u8 value) {
-    // if ( value > 0 ) {
-    //   hal_plot_led(TYPEPAD, index, 0, value / 4, value / 2 );
-    //   recrsvDirFill(DIR_UP, index, 0);
-    // } else {
-    //   hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b );
-    //   // this doesn't clear the left over Paint Up stuff
-    // }
     if (value > 0 ) {
       for ( u8 idx = 0; idx < 8; idx++) {
         color clr = color8(idx, 0);
-        particle p = {directional(idx, index), clr.r * value / 63, clr.g * value / 63, clr.b * value / 63, idx};
+        particle p = {directional(idx, index), clr.r * value / 63, clr.g * value / 63, clr.b * value / 63, idx, 1, 0};
         addParticle(p);
       }
     }
@@ -77,16 +73,90 @@ void FilledDoLess(u8 index, u8 value) {
     (*DoLess)(23, index, value);
 }
 
+void DoLeft(u8 setting, u8 index, u8 value) {
+    if (value > 0 ) {
+        particle p = {directional(7, index), 22, 0, 44, 7, 0, 0};
+        addParticle(p);
+    }
+}
+
+void FilledDoLeft(u8 index, u8 value) {
+    (*DoLeft)(23, index, value);
+}
+
+void DoNote(u8 setting, u8 index, u8 value) {
+    midi_note(0 | setting, index, value);
+    if (value > 0 ) {
+        particle p = {directional(3, index), 44, 44, 44, 3, 2, 0};
+        addParticle(p);
+    }
+}
+
+void FilledDoNote(u8 index, u8 value) {
+    (*DoNote)(0, index, value);
+}
+
+
+void Pressure(u8 setting, u8 index, u8 value) {
+  if ( value > 64 ) {
+      for ( u8 cdx=0; cdx < DIR_NUM; cdx++ ) {
+          u8 rtnPad = directional(cdx, index);
+          if (rtnPad != 0) {
+              hal_plot_led(TYPEPAD, rtnPad, (value - 64), 0, 0 );
+          }
+      }
+  }
+  if ( value <= 64 ) {
+    for ( u8 cdx=0; cdx < DIR_NUM; cdx++ ) {
+        u8 rtnPad = directional(cdx, index);
+        if (rtnPad != 0) {
+            hal_plot_led(TYPEPAD, rtnPad, grid_colors[rtnPad].r, grid_colors[rtnPad].g, grid_colors[rtnPad].b );
+        }
+    }
+  }
+}
+
+void FilledPressure(u8 index, u8 value) {
+    (*Pressure)(23, index, value);
+}
+
+void NullFunction(u8 index, u8 value) {
+    return; //Do nothing! But receives parameters to avoid error.
+}
+
 void prep_surface () {
     for (int i=0; i < 10; ++i) {
         for (int j=0; j < 10; ++j) {
             color clr = {j*2, i*2, i+j};
             grid_colors[j*10 + i] = clr;
             grid_func[j*10 + i] = &FilledDoMore;
+            grid_pres[j*10 + i] = &NullFunction;
+            hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b );
         }
     }
     grid_func[44] = &FilledDoLess;
     grid_func[55] = &FilledDoLess;
     grid_func[66] = &FilledDoLess;
     grid_func[11] = &FilledDoLess;
+    grid_func[19] = &FilledDoLeft;
+    grid_func[29] = &FilledDoLeft;
+    grid_func[39] = &FilledDoLeft;
+    grid_func[49] = &FilledDoLeft;
+    grid_func[59] = &FilledDoLeft;
+    grid_func[69] = &FilledDoLeft;
+    grid_func[79] = &FilledDoLeft;
+    grid_func[89] = &FilledDoLeft;
+    grid_func[12] = &FilledDoNote;
+    grid_func[22] = &FilledDoNote;
+    grid_func[32] = &FilledDoNote;
+    grid_func[42] = &FilledDoNote;
+    grid_func[72] = &NullFunction;
+    grid_func[27] = &NullFunction;
+    grid_func[61] = &NullFunction;
+    grid_func[34] = &NullFunction;
+
+    grid_pres[72] = &FilledPressure;
+    grid_pres[27] = &FilledPressure;
+    grid_pres[61] = &FilledPressure;
+    grid_pres[34] = &Burn;
 }

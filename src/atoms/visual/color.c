@@ -19,7 +19,7 @@ color colorRanger(u8 input, u8 type) {
           rtnColor.g = 63 - (input / 2);
           rtnColor.r = 63;
         break;
-        case 2: // r to y to g to cyan to b to p to r...not really yet. got to find the math for this. but it looks cool anyway!
+        case 2: // r to y to g to cyan to b to p to r...!! :)
             if ( input < 32 ) {
               rtnColor.r = 63 - input * 2;
               rtnColor.g = input * 2;
@@ -38,6 +38,11 @@ color colorRanger(u8 input, u8 type) {
               rtnColor.b = 0;
             }
 
+        break;
+        case 3: //yellow to orange to red
+          rtnColor.g = 0;
+          rtnColor.b = 63 - (input / 2);
+          rtnColor.r = 63;
         break;
         default:
 
@@ -94,4 +99,27 @@ color color8(u8 input, u8 type) {
       }
     }
     return rtnColor;
+}
+
+
+color colorRotator(color cIn, s8 direction) {  //this doesn't work yet. Ideas???
+    if (direction > 0) { direction = 1; }
+    if (direction < 0) { direction = -1; } // 0 would be no motion
+    color cOut = cIn;
+    if (cIn.r > 0) {
+        cOut.r -= direction;
+        cOut.g += direction;
+        if (cOut.g > 63) { cOut.g = 63; }
+    }
+    if (cIn.g > 0) {
+        cOut.g -= direction;
+        cOut.b += direction;
+        if (cOut.b > 63) { cOut.b = 63; }
+    }
+    if (cIn.b > 0) {
+        cOut.b -= direction;
+        cOut.r += direction;
+        if (cOut.r > 63) { cOut.r = 63; }
+    }
+    return cOut;
 }

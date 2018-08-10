@@ -31,16 +31,28 @@ void test(uint8_t const jump_index)
 
 */
 extern color grid_colors[BUTTON_COUNT];
-extern particle particles[64]; //grid_particles aren't positioned by Index per se but by attribute to avoid animation overwriting
-//extern void (*grid_func[BUTTON_COUNT])(void);
+extern particle particles[64]; //grid_particles aren't positioned by Array Index (tried that) but by attribute to avoid animation overwriting
 extern void (*grid_func[BUTTON_COUNT])(u8, u8);
+extern void (*grid_pres[BUTTON_COUNT])(u8, u8);
 
 void recrsvDirFill(u8 dirInt, u8 index, u8 recrsvDepth);
+
 void DoMore(u8 setting, u8 index, u8 value);
 void FilledDoMore(u8 index, u8 value);
 
 void DoLess(u8 setting, u8 index, u8 value);
 void FilledDoLess(u8 index, u8 value);
+
+void DoLeft(u8 setting, u8 index, u8 value);
+void FilledDoLeft(u8 index, u8 value);
+
+void DoNote(u8 setting, u8 index, u8 value);
+void FilledDoNote(u8 index, u8 value);
+
+void Pressure(u8 setting, u8 index, u8 value);
+void FilledPressure(u8 index, u8 value);
+
+void NullFunction(u8 index, u8 value);
 
 void prep_surface();
 
