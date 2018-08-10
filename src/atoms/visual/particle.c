@@ -15,10 +15,14 @@ void moveParticles() {
     if (newPos != 0) {
         position = newPos;
         particles[pdx].positionIndex = position;
-        //drawing now is no good as pads shifted away from may happen before or after and may clear
+        particleBehavior(particles[pdx].behavior, &particles[pdx].nextDir, &particles[pdx].sequence);
+        if ( particles[pdx].sequence > 7 ) {
+          // right now sequence 8 is delete order.
+          particles[pdx].r = particles[pdx].g = particles[pdx].b = particles[pdx].nextDir = particles[pdx].positionIndex = particles[pdx].behavior = particles[pdx].sequence = 0;
+        }
     } else {
         // hit an edge so remove particle
-        particles[pdx].r = particles[pdx].g = particles[pdx].b = particles[pdx].nextDir = particles[pdx].positionIndex = 0;
+        particles[pdx].r = particles[pdx].g = particles[pdx].b = particles[pdx].nextDir = particles[pdx].positionIndex = particles[pdx].behavior = particles[pdx].sequence = 0;
     }
   }
   //draw updated set
@@ -38,4 +42,41 @@ void addParticle(particle p) {
     }
     particles[pdx] = p;
     hal_plot_led(TYPEPAD, particles[pdx].positionIndex, particles[pdx].r, particles[pdx].g, particles[pdx].b  );
+}
+
+void particleBehavior(u8 behavior, u8 *nextDir, u8 *sequence) { //to make particle behavior more than basic,
+    // sequence was introduced to vary the behavior over time.
+    u8 newDir = *nextDir;
+    switch (behavior) {
+      case 0:
+        *sequence = 0;
+        *nextDir = newDir;
+        break;
+      case 1:  //curve Clockwise
+        if (*sequence % 2 == 0) {
+          newDir++;
+          if (newDir > 7) { newDir = 0; }
+        }
+        *nextDir = newDir;
+        *sequence = *sequence + 1;
+        if (*sequence > 8) {
+          *sequence = 0;
+        }
+        break;
+      case 2:  //curve CounterClockwise
+        if (*sequence % 2 == 0) {
+          if (newDir == 0) {
+            newDir = 7;
+          } else {
+            newDir--;
+          }
+        }
+        *nextDir = newDir;
+        *sequence = *sequence + 1;
+        if (*sequence > 8) {
+          *sequence = 0;
+        }
+        break;
+    }
+    return;
 }

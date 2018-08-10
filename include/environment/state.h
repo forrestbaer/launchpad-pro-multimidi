@@ -33,6 +33,7 @@ typedef enum
     LP_PLAY_MODE,
     LP_OFF_MODE,
     LP_OVERLAY_MODE,
+    LP_SETUP_MODE,
     LP_NUM_MODES
 } LpState;
 
@@ -42,6 +43,7 @@ typedef enum
     EVENT_EXIT,
     EVENT_INPUT,
     EVENT_CLOCK,
+    EVENT_PRESSURE,
     EVENT_MSG_COUNT
 } StateEvent;
 
