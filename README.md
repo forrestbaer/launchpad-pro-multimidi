@@ -3,7 +3,9 @@
 # Launchpad Pro MultiMIDI
 ## DigiPADr - The Refactor
 
-Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on Atomic Design principals for:
+In progress: Don't build off of yet! But almost ready to have a solid system for developing all manner of LPP "apps"
+
+Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on a central State Machine and Atomic Design principals for:
 
 - Providing guidance to structuring code in the form of
 - Atoms: the parts that make up the precise, myopic core functionality (going deeper than buttons because that's all LPP is): visual, time, midi, function
