@@ -8,5 +8,6 @@
 void ModeFunc(LpState setting, u8 index, u8 value);
 void ModePlay(u8 index, u8 value);
 void ModeOff(u8 index, u8 value);
+void ModeScaleArp(u8 index, u8 value);
 
 #endif /* mode_func_h */

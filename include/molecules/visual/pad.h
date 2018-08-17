@@ -2,6 +2,7 @@
 #define pad_h
 
 #include "app.h"
+#include "atoms/visual/color.h"
 
 #define LP_FIRST_BUTTON (1)
 #define LP_LAST_BUTTON  (98)
@@ -70,5 +71,41 @@ typedef enum
 } Direction;
 
 u8 directional(Direction whichDir, u8 fromPad);
+
+// Pad Functions (visual, animation...) -> The music side of the Pad functions will be part of this but done thru atoms/function/
+
+
+
+void recrsvDirFill(u8 dirInt, u8 index, u8 recrsvDepth);
+void recrsvDirClear(u8 dirInt, u8 index);
+
+
+// This pattern of Function and FilledFunction is for having a base generic function and then giving it more
+// parameters to load it into the Grid of Functional Pointers. Example: HitNoteAndLightPad would be the generic
+// then the FilledHitNoteAndLightPad would tell it play Middle C and Light it White.
+// Actual Final implementation of this may be a little more complete/complex OR it may end up being simpler
+
+void DoMore(u8 setting, u8 index, u8 value);
+void FilledDoMore(u8 index, u8 value);
+
+void DoSpiral(u8 setting, u8 index, u8 value);
+void FilledDoSpiral(u8 index, u8 value);
+
+void DoLeft(u8 setting, u8 index, u8 value);
+void FilledDoLeft(u8 index, u8 value);
+
+void DoNoteTest(u8 setting, u8 index, u8 value);
+void FilledDoNoteTest(u8 index, u8 value);
+
+void DoNoteBeams(u8 setting, u8 index, u8 value);
+void FilledDoNoteBeams(u8 index, u8 value);
+
+void DoStar(u8 setting, u8 index, u8 value);
+void FilledDoStar(u8 index, u8 value);
+
+void Pressure(u8 setting, u8 index, u8 value);
+void FilledPressure(u8 index, u8 value);
+
+void NullFunction(u8 index, u8 value);
 
 #endif /* pad_h */

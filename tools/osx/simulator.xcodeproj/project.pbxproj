@@ -24,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A444E1602127158800069B59 /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; name = include; path = ../../include; sourceTree = "<group>"; };
+		A444E161212715A100069B59 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = ../../src; sourceTree = "<group>"; };
 		C706519F1B7CC4A20005FDD9 /* app.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = app.c; path = ../../src/app.c; sourceTree = "<group>"; };
 		C70651A11B7CC4B20005FDD9 /* app_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app_defs.h; path = ../../include/app_defs.h; sourceTree = "<group>"; };
 		C70651A21B7CC4B20005FDD9 /* app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app.h; path = ../../include/app.h; sourceTree = "<group>"; };
@@ -63,7 +65,9 @@
 		C71365071B7CC2E500AB8010 = {
 			isa = PBXGroup;
 			children = (
+				A444E161212715A100069B59 /* src */,
 				C70651A61B7CC4DF0005FDD9 /* include */,
+				A444E1602127158800069B59 /* include */,
 				C70651A51B7CC4D60005FDD9 /* source */,
 				C71365111B7CC2E500AB8010 /* Products */,
 			);

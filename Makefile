@@ -10,7 +10,7 @@ SOURCES += src/environment/overlay.c src/environment/state.c src/environment/sur
 SOURCES += src/molecules/music/diatonic.c src/molecules/music/arp.c src/molecules/music/kill.c
 SOURCES += src/molecules/time/animation.c src/molecules/time/arpegiator.c src/molecules/time/loop.c src/molecules/time/sequence.c
 SOURCES += src/molecules/event.c src/molecules/external_input.c src/molecules/visual/clear.c src/molecules/visual/pad.c
-SOURCES += src/organisms/states/setup.c
+SOURCES += src/organisms/states/setup.c src/organisms/states/scalearp.c
 SOURCES += src/organisms/visual/areaset.c src/organisms/visual/columnset.c src/organisms/visual/rowset.c src/organisms/valuestore.c
 
 INCLUDES += -Iinclude -I

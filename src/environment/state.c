@@ -15,10 +15,7 @@ u8 tempCount = 0;
 
 void state_play(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_EXIT) {
-    // this function is going to live on a different level, but the types of things it would do are...
-    kill_channel_notes(0);
-    clear_leds();
-    clear_all_functions();
+    exit_surface();
     return;
   }
   if (msg == EVENT_ENTER) {
@@ -33,7 +30,7 @@ void state_play(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_PRESSURE) {  // this is cool, moving this to state too, then aftertouch only happens when in right state
     hal_send_midi(USBMIDI, POLYAFTERTOUCH | 0, index, value);
     (*grid_pres[index])(index, value);
-    
+
     return;
   }
   if (msg == EVENT_CLOCK) {
@@ -57,9 +54,7 @@ void state_play(StateEvent msg, u8 index, u8 value) {
 
 void state_off(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_EXIT) {
-    kill_channel_notes(0);
-    clear_leds();
-    clear_all_functions();
+    exit_surface();
     return;
   }
   if (msg == EVENT_ENTER) {
