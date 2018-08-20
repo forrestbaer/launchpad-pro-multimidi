@@ -4,7 +4,7 @@
 
 void build_scale_arp() {
     for ( u8 idx = 0; idx < 8; idx++ ) {
-        columnset_R35_arp(48, idx, 11 + idx);
+        columnset_R35_arp(0, idx, 11 + idx); // basenote, mode, start pad (bottom)
     }
 }
 

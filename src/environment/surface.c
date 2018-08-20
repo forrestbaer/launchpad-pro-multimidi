@@ -12,6 +12,9 @@ particle particles[64] = {{0,0,0,0,0,0,0}};
 void (*grid_func[BUTTON_COUNT])(u8, u8) = {NULL};
 void (*grid_pres[BUTTON_COUNT])(u8, u8) = {NULL};
 GridParams grid_params[BUTTON_COUNT] = {{0,0,0,0,0,0}};
+u8 octave = 5;
+u8 keyscale = 0;
+u8 modal = 0;
 
 void exit_surface() {
   kill_channel_notes(0);

@@ -33,15 +33,16 @@ void test(uint8_t const jump_index)
 
 typedef struct {
   u8 p1,p2,p3,p4,p5,p6;
-} GridParams;
+} GridParams;  // different grid_func will use these in different ways
 
 extern color grid_colors[BUTTON_COUNT];
 extern particle particles[64]; //grid_particles aren't positioned by Array Index (tried that) but by attribute to avoid animation overwriting
 extern void (*grid_func[BUTTON_COUNT])(u8, u8);
 extern void (*grid_pres[BUTTON_COUNT])(u8, u8);
-extern GridParams grid_params[BUTTON_COUNT];
-
-
+extern GridParams grid_params[BUTTON_COUNT]; // this holds each pad's parameters. Easier than trying to store them in the grid_func - that was a nightmare
+extern u8 octave;  // octave 2 is like C0 a.k.a. midi note 24 (easier math, no negatives). By default octave is set to 5 which = Middle C (C3) midi note 60
+extern u8 keyscale; // 0 is C, 1 is C#, etc.  Why? Many "Instruments" are in a scale and this allows different scales
+extern u8 modal; // 0 is Major (Ionian), 1 is Dorian, etc. ... past 6 (Locrian) could do exotics...but may need a different system for it.
 
 void exit_surface();
 void prep_surface();

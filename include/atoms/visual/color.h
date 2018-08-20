@@ -14,4 +14,6 @@ color colorRanger(u8 input, u8 type);
 color color8(u8 input, u8 type);
 color colorRotator(color cIn, s8 direction);
 
+color colorArpTriad(u8 arpmode, u8 increment);
+
 #endif /* color_h */

@@ -1,11 +1,11 @@
 #include "environment/state.h"
-#include "molecules/music/kill.h"
-#include "molecules/visual/clear.h"
+//#include "molecules/music/kill.h"
+//#include "molecules/visual/clear.h"
 #include "environment/surface.h"
 #include "molecules/time/animation.h"
 #include "atoms/visual/color.h"
-#include "atoms/function/clear_func.h"
-#include "atoms/function/mode_func.h"
+//#include "atoms/function/clear_func.h"
+//#include "atoms/function/mode_func.h"
 
 LpState current_state = LP_PLAY_MODE;
 
