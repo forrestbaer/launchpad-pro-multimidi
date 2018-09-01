@@ -22,6 +22,12 @@ void exit_surface() {
   clear_all_functions();
 }
 
+void redraw_surface() {  // this repaints all pads but doesn't change functions, etc.
+  for (u8 edx = 0; edx < BUTTON_COUNT; edx++) {
+      hal_plot_led(TYPEPAD, edx, grid_colors[edx].r, grid_colors[edx].g, grid_colors[edx].b );
+  }
+}
+
 void prep_surface () {  // this will be broken down and smartened up :)
     for (int i=0; i < 10; ++i) {
         for (int j=0; j < 10; ++j) {

@@ -45,6 +45,7 @@ typedef enum
     EVENT_INPUT,
     EVENT_CLOCK,
     EVENT_PRESSURE,
+    EVENT_REDRAW,
     EVENT_MSG_COUNT
 } StateEvent;
 

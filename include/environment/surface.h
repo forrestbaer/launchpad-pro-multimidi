@@ -45,6 +45,7 @@ extern u8 keyscale; // 0 is C, 1 is C#, etc.  Why? Many "Instruments" are in a s
 extern u8 modal; // 0 is Major (Ionian), 1 is Dorian, etc. ... past 6 (Locrian) could do exotics...but may need a different system for it.
 
 void exit_surface();
+void redraw_surface();
 void prep_surface();
 
 #endif /* surface_h */

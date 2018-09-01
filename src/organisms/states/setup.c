@@ -19,6 +19,7 @@ void state_setup(StateEvent msg, u8 index, u8 value) {
     case EVENT_INPUT:
       (*grid_func[index])(index, value);
       break;
+    case EVENT_REDRAW:
     case EVENT_CLOCK:
     case EVENT_PRESSURE:
     case EVENT_MSG_COUNT:

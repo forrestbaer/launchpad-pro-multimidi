@@ -1,10 +1,14 @@
 #include "molecules/visual/clear.h"
+#include "environment/surface.h"
+#include "atoms/visual/color.h"
 
 void clear_leds()
 {
     for (u8 i = LP_FIRST_BUTTON; i <= LP_LAST_BUTTON; i++)
     {
         hal_plot_led(TYPEPAD, i, 0x00, 0x00, 0x00);
+        color c = {0,0,0};
+        grid_colors[i] = c;
     }
 }
 
@@ -16,6 +20,8 @@ void clear_pad_leds()
             index += ROW_GAP;
         }
         hal_plot_led(TYPEPAD, index, 0x00, 0x00, 0x00);
+        color c = {0,0,0};
+        grid_colors[index] = c;
         index++;
     }
 }
