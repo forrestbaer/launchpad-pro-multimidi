@@ -31,3 +31,16 @@ void rowset_octave_mode_etc() {
     hal_plot_led(TYPEPAD, 91, c.r, c.g, c.b);
     hal_plot_led(TYPEPAD, 92, c.r, c.g, c.b);
 }
+
+void rowset_circuit_fingerdrum(u8 base, u8 padbase) {  //(idx, 81 - idx * 10);
+    for (u8 adx = 0; adx < 8; adx++) {
+        color c = {44,5*adx,0};
+        grid_colors[padbase + adx] = c;
+        u8 cc_calc = base * 8 + adx;
+        grid_params[padbase + adx].p1 = 0;
+        grid_params[padbase + adx].p2 = cc_calc;
+        grid_func[padbase + adx] = &CircuitDrum;
+        grid_pres[padbase + adx] = &NullFunction;
+        hal_plot_led(TYPEPAD, padbase + adx, c.r, c.g, c.b );
+    }
+}

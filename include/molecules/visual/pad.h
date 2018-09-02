@@ -74,7 +74,12 @@ u8 directional(Direction whichDir, u8 fromPad);
 
 // Pad Functions (visual, animation...) -> The music side of the Pad functions will be part of this but done thru atoms/function/
 
-
+typedef struct {
+   s8 note;
+   s8 channel;
+   s8 note2;
+   s8 note3;
+} heldnote;
 
 void recrsvDirFill(u8 dirInt, u8 index, u8 recrsvDepth);
 void recrsvDirClear(u8 dirInt, u8 index);

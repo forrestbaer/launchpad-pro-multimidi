@@ -35,6 +35,7 @@ typedef enum
     LP_OVERLAY_MODE,
     LP_SETUP_MODE,
     LP_SCALEARP_MODE,
+    LP_CIRCUITPAD_MODE,
     LP_NUM_MODES
 } LpState;
 

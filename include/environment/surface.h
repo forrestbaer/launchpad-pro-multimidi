@@ -15,20 +15,6 @@ The active / current Surface of All Pads, their colors, and function, PLUS a Cou
 An Array of 100 (?98?) Pointers to Functions & An Array of 100 (98?) Colors
 (a few are blank?!?! or used as other holders of info...it seems Novation set it up so the "missing" ones from 100 fail silently if sent color. fine for our purposes)
 
-Safe Array of Function Pointers aka Jump Tables...
-A much better way to code this that avoids these problems is as follows
-
-void test(uint8_t const jump_index)
-{
-    static void (*pf[])(void) = {fna, fnb, fnc, ..., fnz};
-
-    if (jump_index < sizeof(pf) / sizeof(*pf))
-    {
-        //Call the function specified by jump_index
-        pf[jump_index]();
-    }
-}
-
 */
 
 typedef struct {
@@ -40,6 +26,7 @@ extern particle particles[64]; //grid_particles aren't positioned by Array Index
 extern void (*grid_func[BUTTON_COUNT])(u8, u8);
 extern void (*grid_pres[BUTTON_COUNT])(u8, u8);
 extern GridParams grid_params[BUTTON_COUNT]; // this holds each pad's parameters. Easier than trying to store them in the grid_func - that was a nightmare
+extern heldnote heldnotes[BUTTON_COUNT]; //any note goes in, NOTEOFF comes from this... for octave change, complex manipulations, etc.
 extern u8 octave;  // octave 2 is like C0 a.k.a. midi note 24 (easier math, no negatives). By default octave is set to 5 which = Middle C (C3) midi note 60
 extern u8 keyscale; // 0 is C, 1 is C#, etc.  Why? Many "Instruments" are in a scale and this allows different scales
 extern u8 modal; // 0 is Major (Ionian), 1 is Dorian, etc. ... past 6 (Locrian) could do exotics...but may need a different system for it.

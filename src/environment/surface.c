@@ -12,6 +12,7 @@ particle particles[64] = {{0,0,0,0,0,0,0}};
 void (*grid_func[BUTTON_COUNT])(u8, u8) = {NULL};
 void (*grid_pres[BUTTON_COUNT])(u8, u8) = {NULL};
 GridParams grid_params[BUTTON_COUNT] = {{0,0,0,0,0,0}};
+heldnote heldnotes[BUTTON_COUNT] = {{-1,-1,-1,-1}}; // -1 means no note held, otherwise note held
 u8 octave = 5;
 u8 keyscale = 0;
 u8 modal = 0;

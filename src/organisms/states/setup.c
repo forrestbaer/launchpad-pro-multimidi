@@ -15,6 +15,8 @@ void state_setup(StateEvent msg, u8 index, u8 value) {
       grid_func[88] = &ModeOff;
       hal_plot_led(TYPEPAD, 86, 0, 44, 0);
       grid_func[86] = &ModeScaleArp;
+      hal_plot_led(TYPEPAD, 18, 63, 44, 0);
+      grid_func[18] = &ModeCircuitpad;
       break;
     case EVENT_INPUT:
       (*grid_func[index])(index, value);
