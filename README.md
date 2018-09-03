@@ -3,7 +3,7 @@
 # Launchpad Pro MultiMIDI
 ## DigiPADr - The Refactor
 
-In progress: Don't build off of yet! But almost ready to have a solid system for developing all manner of LPP "apps"
+In progress: Build Ready but patterns still evolving.
 
 Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on a central State Machine and Atomic Design principals for:
 
@@ -12,6 +12,16 @@ Open source firmware for the Novation Launchpad Pro grid controller!  A structur
 - Molecules: Buttons/Pads (the basic unit on LPP), Music Constructs, Time Constructs, IO
 - Organisms: Sets of Pads, Sets of Time, and Sets of Data
 - Environments: "Pages" or Surfaces, State, and Overlays (the Top Level Units)
+
+When powered on the surface just demos a bunch of light fx -- hit some pads! The code behind this is more interesting still.
+
+Hit the SETUP button to choose from some preliminary features:
+
+### ScaleArp Advanced - brilliant layout for scales and arps - both vertical and horizontal now
+
+### CircuitPAD - unique ways of "unlocking" Novation Circuit "unlisted features" (read: clever MIDI tricks)
+
+### Rainbow - just animation for now... can you think of a meaningful way to build this into music?
 
 With this structure you can focus more on creating:
 - Implement your own unique standalone apps
