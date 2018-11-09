@@ -13,6 +13,13 @@ Open source firmware for the Novation Launchpad Pro grid controller!  A structur
 - Organisms: Sets of Pads, Sets of Time, and Sets of Data
 - Environments: "Pages" or Surfaces, State, and Overlays (the Top Level Units)
 
+# How to Install Launchpad Pro Custom Firmware (easy!)
+
+These readme's have in the past forgotten to include the simple instructions on how to install custom firmware. Here is the simple steps to do so (other instructions later in this document may be for developers).
+1. Get a program on your computer for midi sysex librarian (snoize or other)
+2. Plug in your launchpad pro via USB into computer, hold SETUP while powering up the LPP (shorthand for Launchpad Pro).
+3. Leave it like that and in the sysex librarian software load in the launchpad firmware .syx file. Select LaunchpadPro as the device to send to. Then select the .syx file then hit PLAY on the sysx lib program. May take a minute but that's it.
+
 When powered on the surface just demos a bunch of light fx -- hit some pads! The code behind this is more interesting still.
 
 Hit the SETUP button to choose from some preliminary features:
