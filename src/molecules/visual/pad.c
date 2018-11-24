@@ -250,3 +250,46 @@ void FilledPressure(u8 index, u8 value) {
 void NullFunction(u8 index, u8 value) {
     return; //Do nothing! But receives parameters to avoid error.
 }
+
+u8 pianoDraw(u8 interval) {
+  // sequential placement of the next key in the keyboard/piano
+
+  //boiling the non-mathematical design of the Piano Keyboard into a function (or the grid based equivalent)
+  //is tough, with no purely math way of doing it. This is the most systematic way I could think up.
+  //its pretty good, and needs to work with another loop to place the keys.
+  s8 totalShift = 0; // this builds thru each progressive piano key, by going thru the chromatic
+  for ( u8 idx = 0; idx < interval; idx++ ) {
+      s8 shiftType = 11; //means goes diagonal right
+      if ( idx == 4 || idx == 11 ) {
+        shiftType = 1;  //means goes to right
+      } else if ( idx == 1 || idx == 3 || idx == 6 || idx == 8 || idx == 10 ) {
+        shiftType = -10; //means goes down
+      }
+      totalShift += shiftType;
+  }
+
+  return totalShift;
+}
+
+// This and convGridto64() help match an array[64] easy to map to the assumed 8x8 grid
+u8 conv64toGrid( u8 orig64 ) { //a new test, i think this is valid
+  // Example Use: Give me 0 - 63 and return pad# to meet that. ie: 11,12,18,21,22,28,,,,88
+    u8 row8 = ((orig64 / 8) + 1) * 10;
+    u8 col8 = (orig64 % 8) + 1;
+    if ( (row8 >= 10) && (row8 < 90) && (col8 >= 1) && (col8 < 9) ) {
+      return row8 + col8;
+    } else {
+      return 99;   // will catch this as bad on other side. ...or ignored as pad 99 is nothing
+    }
+}
+
+u8 convGridto64( u8 origGrid ) {
+  // Example Use: Give me 11,12,18 (Pad Grid Index),,,,88 and return 0, 1, 3, ,,,,63
+    u8 ones = (origGrid % 10) - 1;
+    u8 tens = (origGrid / 10) - 1;
+    if ( (ones >= 0) && (ones < 8) && (tens >= 0) && (tens < 8) ) {
+      return ones + tens * 8;
+    } else {
+      return 99;  // will catch this as bad on other side.
+    }
+}

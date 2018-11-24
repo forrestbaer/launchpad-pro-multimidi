@@ -15,5 +15,6 @@
 void rowset_R35_arp(u8 basenote, u8 arpmode, u8 padbase);
 void rowset_octave_mode_etc();
 void rowset_circuit_fingerdrum(u8 base, u8 padbase);  //(idx, 81 - idx * 10);
+void rowset_circuit_sampletune(u8 base, u8 padbase);
 
 #endif /* rowset_h */

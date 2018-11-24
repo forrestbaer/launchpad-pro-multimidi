@@ -11,16 +11,27 @@ color grid_colors[BUTTON_COUNT] = {{0,0,0}};
 particle particles[64] = {{0,0,0,0,0,0,0}};
 void (*grid_func[BUTTON_COUNT])(u8, u8) = {NULL};
 void (*grid_pres[BUTTON_COUNT])(u8, u8) = {NULL};
-GridParams grid_params[BUTTON_COUNT] = {{0,0,0,0,0,0}};
+GridParams grid_params[BUTTON_COUNT] = {{0,0,0,0,0,0,0,0}};
 heldnote heldnotes[BUTTON_COUNT] = {{-1,-1,-1,-1}}; // -1 means no note held, otherwise note held
-u8 octave = 5;
+u8 octave[2] = {5,5};
 u8 keyscale = 0;
-u8 modal = 0;
+u8 modal = 8;
+u8 scaleOffset = 0;
+u8 hideNonscale = 0;
+u8 mcpSet1 = 0;
+u8 mcpSet2 = 0;
 
 void exit_surface() {
   kill_channel_notes(0);
   clear_leds();
   clear_all_functions();
+}
+
+void change_color(u8 index, u8 r, u8 g, u8 b) {
+  grid_colors[index].r = r;
+  grid_colors[index].g = g;
+  grid_colors[index].b = b;
+  hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b);
 }
 
 void redraw_surface() {  // this repaints all pads but doesn't change functions, etc.

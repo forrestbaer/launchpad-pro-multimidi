@@ -6,5 +6,6 @@
 /* used by columnset and rowset to construct the arps...just the musical side. (maybe colors) */
 
 u8 arp_step_triad(u8 increment);
+u8 arp_step_mcp(u8 increment);
 
 #endif /* arp_h */

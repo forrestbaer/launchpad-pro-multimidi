@@ -175,3 +175,57 @@ color colorArpTriad(u8 arpmode, u8 increment) {
       return cOut;
   }
 }
+
+color colorArpMcp(u8 arpmode, u8 increment) {
+  color cOut = {63,63,63};
+  if ( increment > 3 ) {  //nice cheap way to not have to rewrite all this. :)
+    increment -= 4;
+  }
+  if ( increment % 3 == 0 ) {
+      return cOut;
+  } else if ( increment % 3 == 1 ) {
+      switch (arpmode) {
+        case 0:
+        case 3:
+        case 4:
+        case 7:
+          cOut.g = 0;
+          cOut.b = 0;
+        break;
+        case 1:
+        case 2:
+        case 5:
+          cOut.r = 0;
+          cOut.g = 0;
+        break;
+        case 6:
+          cOut.r = 30;
+          cOut.g = 0;
+          cOut.b = 50;
+        break;
+      }
+      return cOut;
+  } else {
+      switch (arpmode) {
+        case 0:
+        case 3:
+        case 4:
+        case 7:
+          cOut.g = 30;
+          cOut.b = 0;
+        break;
+        case 1:
+        case 2:
+        case 5:
+          cOut.r = 0;
+          cOut.g = 50;
+        break;
+        case 6:
+          cOut.r = 10;
+          cOut.g = 50;
+          cOut.b = 10;
+        break;
+      }
+      return cOut;
+  }
+}

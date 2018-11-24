@@ -113,4 +113,9 @@ void FilledPressure(u8 index, u8 value);
 
 void NullFunction(u8 index, u8 value);
 
+u8 pianoDraw(u8 interval);
+
+u8 conv64toGrid( u8 orig64 );
+u8 convGridto64( u8 origGrid );
+
 #endif /* pad_h */

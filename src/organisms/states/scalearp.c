@@ -21,10 +21,8 @@ void build_scale_arp() {
     }
     rowset_octave_mode_etc();
 
-    color c = {0,0,4};  // an example of a "One Off" button set-up... may be a better way but this is all I got right now.
-    hal_plot_led(TYPEPAD, 98, 0,0,4);
     grid_func[98] = &ToggleScaleArp;
-    grid_colors[98] = c;
+    change_color(98, 0, 0, 4);
 }
 
 void build_scale_arp_vertical() {
@@ -33,10 +31,8 @@ void build_scale_arp_vertical() {
     }
     rowset_octave_mode_etc();
 
-    color c = {0,0,4};
-    hal_plot_led(TYPEPAD, 98, 0,0,4);
     grid_func[98] = &ToggleScaleArpBack;
-    grid_colors[98] = c;
+    change_color(98, 0, 0, 4);
 }
 
 void state_scalearp(StateEvent msg, u8 index, u8 value) {
@@ -52,10 +48,14 @@ void state_scalearp(StateEvent msg, u8 index, u8 value) {
       (*grid_func[index])(index, value);
       break;
     case EVENT_REDRAW:
+      //this is nice if it really is redrawing many of the pads,
+      // but here it was not (only used for Octave redraw = 2 PADS!) so probably remove this...
       redraw_surface();
       break;
-    case EVENT_CLOCK:
     case EVENT_PRESSURE:
+        (*grid_pres[index])(index, value);
+        break;
+    case EVENT_CLOCK:
     case EVENT_MSG_COUNT:
       break;
   }

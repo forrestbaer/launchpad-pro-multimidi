@@ -30,7 +30,6 @@ void state_play(StateEvent msg, u8 index, u8 value) {
   if (msg == EVENT_PRESSURE) {  // this is cool, moving this to state too, then aftertouch only happens when in right state
     hal_send_midi(USBMIDI, POLYAFTERTOUCH | 0, index, value);
     (*grid_pres[index])(index, value);
-
     return;
   }
   if (msg == EVENT_CLOCK) {
@@ -92,8 +91,9 @@ void state_overlay(StateEvent msg, u8 index, u8 value) {
             if (clr.g > 0) { clr.g--; }
             if (clr.r > 0) { clr.r--; }
             if (clr.b > 0) { clr.b--; }
-            grid_colors[j*10 + i] = clr;
-            hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b );
+            // grid_colors[j*10 + i] = clr;
+            // hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b );
+            change_color(j*10 + i, clr.r, clr.g, clr.b);
         }
     }
     return;
@@ -122,8 +122,9 @@ void state_transit(StateEvent msg, u8 index, u8 value) {
             color clr = grid_colors[j*10 + i];
             clr.g += 1;
             if (clr.g > 63) { clr.g = 63; }
-            grid_colors[j*10 + i] = clr;
-            hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b );
+            // grid_colors[j*10 + i] = clr;
+            // hal_plot_led(TYPEPAD, j*10 + i, clr.r, clr.g, clr.b );
+            change_color(j*10 + i, clr.r, clr.g, clr.b);
         }
     }
     return;

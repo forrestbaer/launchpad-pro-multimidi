@@ -14,4 +14,8 @@
 
 void columnset_R35_arp(u8 basenote, u8 arpmode, u8 padbase);
 
+void columnset_MCP_arp(u8 basenote, u8 arpmode, u8 padbase);
+
+void columnset_superslider(u8 midichannel, u8 cc1, s8 cc2, u8 column, u8 r, u8 g, u8 b);
+
 #endif /* columnset_h */
