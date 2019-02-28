@@ -40,7 +40,7 @@ void SliderPressure(u8 index, u8 value) {
           }
         }
         if ( cntDirty == 0 ) {
-          midi_cc(column-1, grid_params[index].p3, grid_params[index].p2);
+          midi_cc(grid_params[index].p1, grid_params[index].p3, grid_params[index].p2);
           hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b); // give defined color back to hit one
         }
         // so send the 'hard value' to slider.
@@ -69,8 +69,34 @@ void SliderPressure(u8 index, u8 value) {
                     u8 weightedAvg = bottom + diff * ratioX100 / 127;
                     // send CC message with the blended hard value
                     midi_cc(grid_params[index].p1, grid_params[index].p3, weightedAvg);
-                    hal_plot_led(TYPEPAD, index, grid_colors[index].r/2, grid_colors[index].g/2, grid_colors[index].b/2);
-                    hal_plot_led(TYPEPAD, cdx*10+column, grid_colors[cdx*10+column].r/2, grid_colors[cdx*10+column].g/2, grid_colors[cdx*10+column].b/2);
+                    // hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b);
+                    // hal_plot_led(TYPEPAD, cdx*10+column, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b);
+                    if ( weightedAvg >= 0 && weightedAvg <= 31 ) {
+                        hal_plot_led(TYPEPAD, 10+column, grid_colors[10+column].r, grid_colors[10+column].g, grid_colors[10+column].b);
+                    }
+                    //{0,31,46,63,78,96,111,127};
+                    if ( weightedAvg >= 15 && weightedAvg <= 39 ) {
+                        hal_plot_led(TYPEPAD, 20+column, grid_colors[20+column].r, grid_colors[20+column].g, grid_colors[20+column].b);
+                    }
+                    if ( weightedAvg >= 39 && weightedAvg <= 56 ) {
+                        hal_plot_led(TYPEPAD, 30+column, grid_colors[30+column].r, grid_colors[30+column].g, grid_colors[30+column].b);
+                    }
+                    if ( weightedAvg >= 56 && weightedAvg <= 70 ) {
+                        hal_plot_led(TYPEPAD, 40+column, grid_colors[40+column].r, grid_colors[40+column].g, grid_colors[40+column].b);
+                    }
+                    if ( weightedAvg >= 70 && weightedAvg <= 83 ) {
+                        hal_plot_led(TYPEPAD, 50+column, grid_colors[50+column].r, grid_colors[50+column].g, grid_colors[50+column].b);
+                    }
+                    if ( weightedAvg >= 83 && weightedAvg <= 107 ) {
+                        hal_plot_led(TYPEPAD, 60+column, grid_colors[60+column].r, grid_colors[60+column].g, grid_colors[60+column].b);
+                    }
+                    if ( weightedAvg >= 107 && weightedAvg <= 119 ) {
+                        hal_plot_led(TYPEPAD, 70+column, grid_colors[70+column].r, grid_colors[70+column].g, grid_colors[70+column].b);
+                    }
+                    if ( weightedAvg >= 119 && weightedAvg <= 127 ) {
+                        hal_plot_led(TYPEPAD, 80+column, grid_colors[80+column].r, grid_colors[80+column].g, grid_colors[80+column].b);
+                    }
+
                 }  // else means both are falling and we don't want to send CC message if this case.
             }
         }

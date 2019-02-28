@@ -3,6 +3,8 @@
  Copyright (c) 2015, Focusrite Audio Engineering Ltd.
  All rights reserved.
 
+ Copywrite (c) 2018 Fenix Song version: OpenLaunch
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
 
@@ -41,6 +43,7 @@
 #include "environment/surface.h"
 #include "molecules/event.h"
 #include "organisms/states/setup.h"
+#include "atoms/function/mode_func.h"
 
 //______________________________________________________________________________
 //
@@ -58,6 +61,27 @@
 
 
 //u8 g_Buttons[BUTTON_COUNT] = {0};
+u8 memory_store[30] = { 0,0,0,0,0,5,5,0,0,0,
+                        0,1,2,3,4,5,6,7,8,9,
+                        10,11,12,13,14,15,0,0,0,0,
+                        };
+
+u8 aft_cc_ones = 1;
+u8 aft_cc_tens = 0;
+u8 aft_cc_hundreds = 0;
+/* 30 u8 slots to store only the important settings for recall of the last state of the OpenLaunch
+0 = last state/mode
+1 = Key
+2 = Scale
+3 = Offset Mode
+4 = Scale Mode On/Off
+5 = Octave 1....don't write to this all the time
+6 = Octave 2....don't write to this all the time
+7 = Velocity Curve
+8 = Aftertouch (0 off, 1 channel, 2 poly, 100+ map to CC by subtract 100= CC#)
+9 = last sub-mode
+10 - 25 "Virtual Instrument" slots 1 thru 16 to assign midi channels
+*/
 
 //______________________________________________________________________________
 
@@ -91,6 +115,7 @@ void app_surface_event(u8 type, u8 index, u8 value)
             {
                 // sample code: save button states to flash (reload them by power cycling the hardware!)
                 //hal_write_flash(0, g_Buttons, BUTTON_COUNT);
+                //hal_write_flash(0, memory_store, 20); // maybe smarter place to put this
 
                 //TEMP... make better for toggle back to last state
                 transition_state( state_setup );
@@ -158,11 +183,27 @@ void app_timer_event()
 
 void app_init(const u16 *adc_raw)
 {
-    // example - load button states from flash
-    //hal_read_flash(0, g_Buttons, BUTTON_COUNT);
+    memory_store[MEM_OCTAVE1] = 5;
+    memory_store[MEM_OCTAVE2] = 5; // default octaves
+
+    // load in the stored memory
+    hal_read_flash(0, memory_store, 30);
 
     prep_surface();
 
-    transition_state( state_play );
-    //transition_state( state_off );
+    // load the memory_store into the appropriate variables
+    // TODO... with enum making it clearer, these variables could go away I think
+    current_state = memory_store[MEM_LAST_MODE];
+    keyscale = memory_store[MEM_KEY];
+    modal = memory_store[MEM_SCALE];
+    scaleOffset = memory_store[MEM_OFFSET_MODE];
+    hideNonscale = memory_store[MEM_SCALE_MODE_ACTIVE];
+    velocityCurve = memory_store[MEM_VELOCITY];
+
+    aft_cc_ones = memory_store[MEM_AFTERTOUCH] % 10;
+    aft_cc_tens = (memory_store[MEM_AFTERTOUCH] % 100) / 10;
+    aft_cc_hundreds = memory_store[MEM_AFTERTOUCH] / 100;
+
+    ModeFunc(memory_store[MEM_LAST_MODE], 0, 0);
+
 }

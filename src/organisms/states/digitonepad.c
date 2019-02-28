@@ -159,6 +159,8 @@ void state_digitonepad(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_ENTER:
       current_state = LP_DIGITONEPAD_MODE; // for side queries of state...? still haven't needed it anywhere - just may need it?
+      memory_store[0] = LP_DIGITONEPAD_MODE;
+      hal_write_flash(0, memory_store, 30);
       build_digitonepad();
       break;
     case EVENT_INPUT:

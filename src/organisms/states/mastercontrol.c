@@ -148,7 +148,9 @@ void state_mastercontrol(StateEvent msg, u8 index, u8 value) {
       exit_surface();
       break;
     case EVENT_ENTER:
-      current_state = LP_MASTERCONTROL_MODE; // for side queries of state...? still haven't needed it anywhere - just may need it?
+      current_state = LP_MASTERCONTROL_MODE;
+      memory_store[0] = LP_MASTERCONTROL_MODE;
+      hal_write_flash(0, memory_store, 30);
       build_mastercontrol();
       break;
     case EVENT_INPUT:
@@ -157,10 +159,12 @@ void state_mastercontrol(StateEvent msg, u8 index, u8 value) {
     case EVENT_REDRAW:
       //this is nice if it really is redrawing many of the pads,
       // but here it was not (only used for Octave redraw = 2 PADS!) so probably remove this...
-      redraw_surface();
+      // redraw_surface();
+      // break;
+    case EVENT_PRESSURE:
+      (*grid_pres[index])(index, value);
       break;
     case EVENT_CLOCK:
-    case EVENT_PRESSURE:
     case EVENT_MSG_COUNT:
       break;
   }

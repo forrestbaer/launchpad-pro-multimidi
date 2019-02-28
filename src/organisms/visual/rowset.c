@@ -24,8 +24,9 @@ void rowset_R35_arp(u8 basenote, u8 arpmode, u8 padbase) {
 void rowset_octave_mode_etc() {
     grid_func[91] = &ChangeOctaveUp;
     grid_func[92] = &ChangeOctaveDown;
-    change_color(91, 33 + 3 * octave[0], 6 * octave[0] + 3, 63);
-    change_color(92, 33 + 3 * octave[0], 6 * octave[0] + 3, 63);
+    color c = octaveColor(0);
+    change_color(91, c.r, c.g, c.b);
+    change_color(92, c.r, c.g, c.b);
 }
 
 void rowset_circuit_fingerdrum(u8 base, u8 padbase) {  //(idx, 81 - idx * 10);

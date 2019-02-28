@@ -43,7 +43,6 @@ void ModeFunc(LpState setting, u8 index, u8 value) {
 }
 
 void ModePlay(u8 index, u8 value) {
-    //maybe add specific instruments next...could use "value"
     (*ModeFunc)(LP_PLAY_MODE, index, value);
 }
 

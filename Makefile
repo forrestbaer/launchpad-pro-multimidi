@@ -21,7 +21,7 @@ LIB = lib/launchpad_pro.a
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 # output files
-SYX = $(BUILDDIR)/launchpad_pro.syx
+SYX = $(BUILDDIR)/openlaunch_lpp.syx
 ELF = $(BUILDDIR)/launchpad_pro.elf
 HEX = $(BUILDDIR)/launchpad_pro.hex
 HEXTOSYX = $(BUILDDIR)/hextosyx

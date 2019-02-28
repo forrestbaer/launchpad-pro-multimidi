@@ -34,11 +34,14 @@ extern u8 keyscale; // 0 is C, 1 is C#, etc.  Why? Many "Instruments" are in a s
 extern u8 modal; // see diatonic.c for a list of the scales/modes that line up to this
 extern u8 scaleOffset;  // like offset on LPP factory scale mode. 0 = ? no offset just natural note progression, 7 = octaves lined up??
 extern u8 hideNonscale; // 0 = original LPP before scale mode, 1 = scale mode, may add more types
+extern u8 velocityCurve; 
+extern u8 selectedSlot;
 extern u8 mcpSet1;
 extern u8 mcpSet2; // 2 groups of settings for channel options for the MCP mode
 
 void exit_surface();
 void change_color(u8 index, u8 r, u8 g, u8 b);
+void red_notes();
 void redraw_surface();
 void prep_surface();
 

@@ -64,14 +64,16 @@ void state_circuitpad(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_ENTER:
       current_state = LP_CIRCUITPAD_MODE; // for side queries of state...? still haven't needed it anywhere - just may need it?
+      memory_store[0] = LP_CIRCUITPAD_MODE;
+      hal_write_flash(0, memory_store, 30);
       build_circuitpad();
       break;
     case EVENT_INPUT:
       (*grid_func[index])(index, value);
       break;
     case EVENT_REDRAW:
-      redraw_surface();
-      break;
+      // redraw_surface();
+      // break;
     case EVENT_CLOCK:
     case EVENT_PRESSURE:
     case EVENT_MSG_COUNT:

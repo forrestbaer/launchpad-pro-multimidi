@@ -240,17 +240,9 @@ void CircuitChromaticSample(u8 index, u8 value) {
     }
 }
 
-void ChangeOctave(bool isUp, u8 whichOctave) {
-    if (isUp) {
-      if (octave[whichOctave] + 1 > 10) { return; }
-      octave[whichOctave]++;
-    } else {
-      s8 s8octave = octave[whichOctave];
-      if (s8octave - 1 < 0) { return; }
-      octave[whichOctave]--;
-    }
+color octaveColor(u8 which) {
     color c = {0,0,0};
-    switch (octave[whichOctave]) {  // could move to color.c
+    switch (octave[which]) {  // could move to color.c
       case 0:
         c.r = 7;
       break;
@@ -296,9 +288,24 @@ void ChangeOctave(bool isUp, u8 whichOctave) {
         c.g = 50;
       break;
     }
+    return c;
+}
+
+void ChangeOctave(bool isUp, u8 whichOctave) {
+    if (isUp) {
+      if (octave[whichOctave] + 1 > 10) { return; }
+      octave[whichOctave]++;
+    } else {
+      s8 s8octave = octave[whichOctave];
+      if (s8octave - 1 < 0) { return; }
+      octave[whichOctave]--;
+    }
+    memory_store[5+whichOctave] = octave[whichOctave];  // put in the store but not saved until other save events
+    color c = octaveColor(whichOctave);
     if ( whichOctave == 0 ) {
       change_color(91, c.r, c.g, c.b);
       change_color(92, c.r, c.g, c.b);
+      (*stateMachine)(EVENT_REDRAW, 0, 0); 
     } else if ( whichOctave == 1) {
       change_color(1, c.r, c.g, c.b);
       change_color(2, c.r, c.g, c.b);

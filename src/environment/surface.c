@@ -18,6 +18,8 @@ u8 keyscale = 0;
 u8 modal = 8;
 u8 scaleOffset = 0;
 u8 hideNonscale = 0;
+u8 velocityCurve = 0;
+u8 selectedSlot = 0;
 u8 mcpSet1 = 0;
 u8 mcpSet2 = 0;
 
@@ -32,6 +34,19 @@ void change_color(u8 index, u8 r, u8 g, u8 b) {
   grid_colors[index].g = g;
   grid_colors[index].b = b;
   hal_plot_led(TYPEPAD, index, grid_colors[index].r, grid_colors[index].g, grid_colors[index].b);
+}
+
+void red_notes() {
+    // see if notes are outside the range of valid midi notes (based on octave) and draw red if < 0 or > 127
+    for ( u8 cdx = 1; cdx < 9; cdx++ ) {
+        for ( u8 rdx = 1; rdx < 9; rdx++ ) {
+            u8 note =  grid_params[rdx*10+cdx].p2 + octave[0] * 12 + keyscale;
+            if (note < 0 || note > 127) {
+                change_color(rdx*10+cdx, 50, 0, 0);
+                grid_func[rdx*10+cdx] = &NullFunction;  // have to see if this will go back once octave range is good again.
+            }
+        }
+    }
 }
 
 void redraw_surface() {  // this repaints all pads but doesn't change functions, etc.

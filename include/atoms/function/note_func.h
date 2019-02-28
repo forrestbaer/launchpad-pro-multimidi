@@ -2,6 +2,7 @@
 #define note_func_h
 
 #include "app.h"
+#include "atoms/visual/color.h"
 
 u8 roundrobin;
 
@@ -17,6 +18,7 @@ void McpCCStatic(u8 index, u8 value);
 void rrUpCheck();
 void CircuitDrum(u8 index, u8 value);
 void CircuitChromaticSample(u8 index, u8 value);
+color octaveColor(u8 which);
 void ChangeOctave(bool isUp, u8 whichOctave);
 void ChangeOctaveUp(u8 index, u8 value);
 void ChangeOctaveDown(u8 index, u8 value);

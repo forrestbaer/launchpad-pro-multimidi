@@ -204,4 +204,42 @@ void app_surface_event(u8 type, u8 index, u8 value);
  */
 void app_aftertouch_event(u8 index, u8 value);
 
+extern u8 memory_store[30];
+extern u8 aft_cc_ones;
+extern u8 aft_cc_tens;
+extern u8 aft_cc_hundreds;
+
+typedef enum
+{
+    MEM_LAST_MODE,
+    MEM_KEY,
+    MEM_SCALE,
+    MEM_OFFSET_MODE,
+    MEM_SCALE_MODE_ACTIVE,
+    MEM_OCTAVE1,
+    MEM_OCTAVE2,
+    MEM_VELOCITY,
+    MEM_AFTERTOUCH,
+    MEM_LAST_SUB_MODE,
+    MEM_VINST_SLOT01,
+    MEM_VINST_SLOT02,
+    MEM_VINST_SLOT03,
+    MEM_VINST_SLOT04,
+    MEM_VINST_SLOT05,
+    MEM_VINST_SLOT06,
+    MEM_VINST_SLOT07,
+    MEM_VINST_SLOT08,
+    MEM_VINST_SLOT09,
+    MEM_VINST_SLOT10,
+    MEM_VINST_SLOT11,
+    MEM_VINST_SLOT12,
+    MEM_VINST_SLOT13,
+    MEM_VINST_SLOT14,
+    MEM_VINST_SLOT15,
+    MEM_VINST_SLOT16,
+    MEM_NUM
+} memory_slots;
+
+
+
 #endif

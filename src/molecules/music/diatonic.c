@@ -15,7 +15,7 @@ const u8 diatonic_fundemental[] = {
 
 // Circuit scale modes....
 const u8 scales[16][13] = {
-  {6, 0, 3, 5, 6, 7, 10}, // Blues  [[1st ROW]]
+    {6, 0, 3, 5, 6, 7, 10}, // Blues  [[1st ROW]]
 	{5, 0, 3, 5, 7, 10}, // Minor Pentatonic
 	{7, 0, 2, 3, 6, 7, 8, 11}, // Hungarian Minor
 	{7, 0, 2, 3, 6, 7, 9, 10}, // Ukrainian Dorian
