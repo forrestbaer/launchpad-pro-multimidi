@@ -1,9 +1,7 @@
 [![Build Status](https://travis-ci.org/dvhdr/launchpad-pro.svg?branch=master)](https://travis-ci.org/dvhdr/launchpad-pro)
 
 # Launchpad Pro MultiMIDI
-## DigiPADr - The Refactor
-
-In progress: Build Ready but patterns still evolving.
+## OpenLAUNCH - The Future of Midi Devices!
 
 Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on a central State Machine and Atomic Design principals for:
 
@@ -15,7 +13,7 @@ Open source firmware for the Novation Launchpad Pro grid controller!  A structur
 
 # How to Install Launchpad Pro Custom Firmware (easy!)
 
-These readme's have in the past forgotten to include the simple instructions on how to install custom firmware. Here is the simple steps to do so (other instructions later in this document may be for developers).
+Other LPP readme's have forgotten to include the simple instructions on how to install custom firmware. Here are those simple steps (other instructions later in this document may be for developers).
 1. Get a program on your computer for midi sysex librarian (snoize or other)
 2. Plug in your launchpad pro via USB into computer, hold SETUP while powering up the LPP (shorthand for Launchpad Pro).
 3. Leave it like that and in the sysex librarian software load in the launchpad firmware .syx file. Select LaunchpadPro as the device to send to. Then select the .syx file then hit PLAY on the sysx lib program. May take a minute but that's it.
@@ -26,9 +24,17 @@ Hit the SETUP button to choose from some preliminary features:
 
 ### ScaleArp Advanced - brilliant layout for scales and arps - both vertical and horizontal now
 
+### Scale Mode - like the original LPP with a few differences (hit NOTE button)
+
 ### CircuitPAD - unique ways of "unlocking" Novation Circuit "unlisted features" (read: clever MIDI tricks)
 
 ### Rainbow - just animation for now... can you think of a meaningful way to build this into music?
+
+### Digitone Parameter Controller (hit Teal button on the left)
+
+?? Maybe more...will update soon.
+
+#### Full instructions coming soon on fenixsong.com
 
 With this structure you can focus more on creating:
 - Implement your own unique standalone apps
