@@ -44,7 +44,7 @@
 // ____________________________________________________________________________
 //
 #include "app_defs.h"
-#include "environment/state.h"
+#include "state/state.h"
 
 /******************************************************************************
  Button indexing is as follows - numbers in brackets do not correspond to real
@@ -211,16 +211,16 @@ extern u8 aft_cc_hundreds;
 
 typedef enum
 {
-    MEM_LAST_MODE,
+    MEM_LAST_STATE,
     MEM_KEY,
     MEM_SCALE,
-    MEM_OFFSET_MODE,
-    MEM_SCALE_MODE_ACTIVE,
+    MEM_OFFSET_STATE,
+    MEM_SCALE_STATE_ACTIVE,
     MEM_OCTAVE1,
     MEM_OCTAVE2,
     MEM_VELOCITY,
     MEM_AFTERTOUCH,
-    MEM_LAST_SUB_MODE,
+    MEM_LAST_SUB_STATE,
     MEM_VINST_SLOT01,
     MEM_VINST_SLOT02,
     MEM_VINST_SLOT03,

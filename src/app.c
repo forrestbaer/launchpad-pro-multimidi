@@ -38,12 +38,11 @@
 //______________________________________________________________________________
 
 #include "app.h"
-#include "environment/state.h"
-#include "environment/timer.h"
-#include "environment/surface.h"
-#include "molecules/event.h"
-#include "organisms/states/setup.h"
-#include "atoms/function/mode_func.h"
+#include "state/state.h"
+#include "time/timer.h"
+#include "visual/surface.h"
+#include "midi/event.h"
+#include "state/states/setup.h"
 
 //______________________________________________________________________________
 //
@@ -70,16 +69,16 @@ u8 aft_cc_ones = 1;
 u8 aft_cc_tens = 0;
 u8 aft_cc_hundreds = 0;
 /* 30 u8 slots to store only the important settings for recall of the last state of the OpenLaunch
-0 = last state/mode
+0 = last state
 1 = Key
 2 = Scale
-3 = Offset Mode
-4 = Scale Mode On/Off
+3 = Offset State
+4 = Scale State On/Off
 5 = Octave 1....don't write to this all the time
 6 = Octave 2....don't write to this all the time
 7 = Velocity Curve
 8 = Aftertouch (0 off, 1 channel, 2 poly, 100+ map to CC by subtract 100= CC#)
-9 = last sub-mode
+9 = last sub-state
 10 - 25 "Virtual Instrument" slots 1 thru 16 to assign midi channels
 */
 
@@ -193,17 +192,17 @@ void app_init(const u16 *adc_raw)
 
     // load the memory_store into the appropriate variables
     // TODO... with enum making it clearer, these variables could go away I think
-    current_state = memory_store[MEM_LAST_MODE];
+    current_state = memory_store[MEM_LAST_STATE];
     keyscale = memory_store[MEM_KEY];
     modal = memory_store[MEM_SCALE];
-    scaleOffset = memory_store[MEM_OFFSET_MODE];
-    hideNonscale = memory_store[MEM_SCALE_MODE_ACTIVE];
+    scaleOffset = memory_store[MEM_OFFSET_STATE];
+    hideNonscale = memory_store[MEM_SCALE_STATE_ACTIVE];
     velocityCurve = memory_store[MEM_VELOCITY];
 
     aft_cc_ones = memory_store[MEM_AFTERTOUCH] % 10;
     aft_cc_tens = (memory_store[MEM_AFTERTOUCH] % 100) / 10;
     aft_cc_hundreds = memory_store[MEM_AFTERTOUCH] / 100;
 
-    ModeFunc(memory_store[MEM_LAST_MODE], 0, 0);
+    StateFunc(memory_store[MEM_LAST_STATE], 0, 0);
 
 }

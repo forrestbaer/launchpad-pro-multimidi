@@ -2,17 +2,19 @@ BUILDDIR = build
 
 TOOLS = tools
 
-SOURCES += src/app.c src/atoms/function/cc_func.c src/atoms/function/clear_func.c src/atoms/function/delve.c src/atoms/function/drum.c src/atoms/function/mode_func.c
-SOURCES += src/atoms/function/note_func.c src/atoms/function/pc_func.c src/atoms/function/phrase.c
-SOURCES += src/atoms/midi/aftertouch.c src/atoms/midi/cc.c src/atoms/midi/midi.c src/atoms/midi/note.c src/atoms/midi/pc.c src/atoms/midi/sysex.c
-SOURCES += src/atoms/time/step.c src/atoms/time/loopevent.c src/atoms/visual/color.c src/atoms/visual/light.c src/atoms/visual/particle.c src/atoms/visual/pressure.c
-SOURCES += src/environment/overlay.c src/environment/state.c src/environment/surface.c src/environment/timer.c
-SOURCES += src/molecules/music/diatonic.c src/molecules/music/arp.c src/molecules/music/kill.c
-SOURCES += src/molecules/time/animation.c src/molecules/time/arpegiator.c src/molecules/time/loop.c src/molecules/time/sequence.c
-SOURCES += src/molecules/event.c src/molecules/external_input.c src/molecules/visual/clear.c src/molecules/visual/pad.c
-SOURCES += src/organisms/states/setup.c src/organisms/states/scalearp.c src/organisms/states/mastercontrol.c 
-SOURCES += src/organisms/states/digitonepad.c src/organisms/states/circuitpad.c src/organisms/states/keyscale.c
-SOURCES += src/organisms/visual/areaset.c src/organisms/visual/columnset.c src/organisms/visual/rowset.c src/organisms/valuestore.c
+SOURCES += src/app.c src/util/clear_func.c src/util/delve.c 
+SOURCES += src/util/drum.c src/util/note_func.c src/util/octave.c src/util/phrase.c
+SOURCES += src/midi/aftertouch.c src/midi/cc.c src/midi/midi.c src/midi/note.c 
+SOURCES += src/midi/pc.c src/midi/sysex.c
+SOURCES += src/time/step.c src/time/loopevent.c src/visual/color.c 
+SOURCES += src/visual/particle.c src/visual/pressure.c
+SOURCES += src/visual/overlay.c src/state/state.c src/visual/surface.c src/time/timer.c
+SOURCES += src/music/diatonic.c src/music/arp.c src/music/kill.c
+SOURCES += src/time/animation.c src/time/arpegiator.c src/time/loop.c src/time/sequence.c
+SOURCES += src/midi/event.c src/visual/clear.c src/visual/pad.c
+SOURCES += src/state/states/setup.c src/state/states/scalearp.c src/state/states/mastercontrol.c 
+SOURCES += src/state/states/digitonepad.c src/state/states/circuitpad.c src/state/states/keyscale.c
+SOURCES += src/visual/areaset.c src/visual/columnset.c src/visual/rowset.c
 
 INCLUDES += -Iinclude -I
 

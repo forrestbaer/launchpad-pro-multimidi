@@ -3,13 +3,7 @@
 # Launchpad Pro MultiMIDI
 ## OpenLAUNCH - The Future of Midi Devices!
 
-Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on a central State Machine and Atomic Design principals for:
-
-- Providing guidance to structuring code in the form of
-- Atoms: the parts that make up the precise, myopic core functionality (going deeper than buttons because that's all LPP is): visual, time, midi, function
-- Molecules: Buttons/Pads (the basic unit on LPP), Music Constructs, Time Constructs, IO
-- Organisms: Sets of Pads, Sets of Time, and Sets of Data
-- Environments: "Pages" or Surfaces, State, and Overlays (the Top Level Units)
+Open source firmware for the Novation Launchpad Pro grid controller!  A structure based on a central State Machine and multiple Launchpad "Apps" in one (removed Atomic Design structure for more direct pattern)
 
 # How to Install Launchpad Pro Custom Firmware (easy!)
 
@@ -34,7 +28,7 @@ Hit the SETUP button to choose from some preliminary features:
 
 ?? Maybe more...will update soon.
 
-#### Full instructions coming soon on fenixsong.com
+#### Full instructions on fenixsong.com/openlaunch
 
 With this structure you can focus more on creating:
 - Implement your own unique standalone apps
