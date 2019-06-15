@@ -74,6 +74,8 @@ void ChangeOctave(bool isUp, u8 whichOctave) {
       change_color(1, c.r, c.g, c.b);
       change_color(2, c.r, c.g, c.b);
     }
+    // TODO: Shouldn't there be a "red_notes" redraw ???
+
     //(*stateMachine)(EVENT_REDRAW, 0, 0);  // wasteful redraw
     //kill_channel_notes(0);  // old way before heldnotes
 }

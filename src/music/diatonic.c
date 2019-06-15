@@ -33,7 +33,6 @@ const u8 scales[16][13] = {
 	{8, 0, 2, 3, 4, 5, 7, 9, 10}, // BeBop Dorian
 };
 
-
 // LPP scale modes....
 // const u8 scales[32][13] = {
 // 	{5, 0, 1, 5, 7, 10}, // In Sen

@@ -6,6 +6,7 @@
 #include <math.h>
 
 extern u8 animCnt;
+extern d8 preciseTime;
 
 void core_clock();
 

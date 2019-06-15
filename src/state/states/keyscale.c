@@ -1,11 +1,13 @@
 #include "state/states/keyscale.h"
 #include "visual/surface.h"
+#include "visual/color.h"
 #include "visual/columnset.h"
 #include "visual/rowset.h"
 #include "visual/pad.h"
 #include "music/diatonic.h"
 #include "util/note_func.h"
 #include "midi/aftertouch.h"
+#include "music/kill.h"
 
 void SetSubStatePlay(u8 index, u8 value) {
     if (value > 0) {
@@ -32,6 +34,12 @@ void SetSubStateAftertouch(u8 index, u8 value) {
     }
 }
 
+void SetSubStateColorScheme(u8 index, u8 value) {
+    if (value > 0) {
+        build_colorscheme();
+    }
+}
+
 void paint_state_notes() {
     // given a key and State/scale... give more indication on the "piano display" what notes are in scale
     color dimTeal = {0,16,6};
@@ -51,9 +59,9 @@ void paint_state_notes() {
 
     // make a test for the notes in scale
 
-    for ( u8 sdx = 1; sdx <= scales[modal][0]; sdx++ ) {  // this will skip the root, allow each in scale
+    for ( u8 sdx = 1; sdx <= scales[memory_store[MEM_SCALE]][0]; sdx++ ) {  // this will skip the root, allow each in scale
         // add root_note_number to scales[modal][sdx]
-        u8 wk_note = keyscale + scales[modal][sdx];
+        u8 wk_note = memory_store[MEM_KEY] + scales[memory_store[MEM_SCALE]][sdx];
         if ( wk_note > 11 ) {
             wk_note -= 12;
         }
@@ -76,8 +84,7 @@ void SetKey(u8 index, u8 value) {
               grid_params[cdx].p1 = 0;
             }
         }
-        keyscale = grid_params[index].p2;
-        memory_store[1] = grid_params[index].p2;
+        memory_store[MEM_KEY] = grid_params[index].p2;
         grid_params[index].p1 = 1;
         change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
         paint_state_notes();
@@ -96,11 +103,7 @@ void SetModal(u8 index, u8 value) {
         }
       }
 
-      // ADD simple TEST for if NOTE is in KEY and State, wrap around may be a trick.
-
-
-      modal = grid_params[index].p2;
-      memory_store[2] = grid_params[index].p2;
+      memory_store[MEM_SCALE] = grid_params[index].p2;
       grid_params[index].p1 = 1;
       change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
       paint_state_notes();
@@ -117,8 +120,7 @@ void SetOffset(u8 index, u8 value) {
               grid_params[pad].p1 = 0;
             }
         }
-        scaleOffset = grid_params[index].p2;
-        memory_store[3] = grid_params[index].p2;
+        memory_store[MEM_OFFSET_STATE] = grid_params[index].p2;
         grid_params[index].p1 = 1;
         change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
     }
@@ -133,8 +135,7 @@ void SetHideNonscale( u8 index, u8 value ) {
             grid_params[pad].p1 = 0;
           }
       }
-      hideNonscale = grid_params[index].p2;
-      memory_store[4] = grid_params[index].p2;
+      memory_store[MEM_SCALE_STATE_ACTIVE] = grid_params[index].p2;
       grid_params[index].p1 = 1;
       change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
     }
@@ -231,8 +232,7 @@ void SetVelocityCurve(u8 index, u8 value) {
               grid_params[pad].p1 = 0;
             }
         }
-        velocityCurve = grid_params[index].p2;
-        memory_store[7] = grid_params[index].p2;
+        memory_store[MEM_VELOCITY] = grid_params[index].p2;
         grid_params[index].p1 = 1;
         change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
     }
@@ -287,8 +287,28 @@ void SetMidiChannel(u8 index, u8 value) {
     }
 }
 
+
+void SetColorScheme(u8 index, u8 value) {
+    if (value > 0) {
+      for ( u8 rdx = 7; rdx < 9; rdx++ ) {
+        for ( u8 cdx = 1; cdx < 9; cdx++ ) {
+          u8 pad = rdx*10 + cdx;
+          if ( grid_params[pad].p1 == 1 ) {
+            change_color(pad, grid_colors[pad].r / 4, grid_colors[pad].g / 4, grid_colors[pad].b / 4);
+            grid_params[pad].p1 = 0;
+          }
+        }
+      }
+
+      memory_store[MEM_COLOR_SCHEME] = grid_params[index].p2;
+
+      grid_params[index].p1 = 1;
+      change_color(index, grid_colors[index].r * 4, grid_colors[index].g * 4, grid_colors[index].b * 4);
+    }
+}
+
 void clear_keyscale() {
-    for ( u8 cdx = 0; cdx < 10; cdx++ ) {  //clear out for purity ;)
+    for ( u8 cdx = 0; cdx < 10; cdx++ ) {  //clear out all and reset properly
       for ( u8 rdx = 0; rdx < 10; rdx++ ) {
         grid_params[cdx*10+rdx].p2 = 0;
         change_color(cdx*10+rdx, 0, 0, 0);
@@ -296,6 +316,7 @@ void clear_keyscale() {
         grid_pres[cdx*10+rdx] = &NullFunction;
       }
     }
+    kill_held_notes();
 }
 
 void build_keyscale() {
@@ -314,7 +335,7 @@ void build_keyscale() {
             curColor = dimPurple;
         }
         grid_func[pad] = &SetKey;
-        if ( keyscale == pdx ) {
+        if ( memory_store[MEM_KEY] == pdx ) {
           grid_params[pad].p1 = 1; //checks if keyscale (global var) then it is on
           curColor.r *= 4;
           curColor.g *= 4;
@@ -331,7 +352,7 @@ void build_keyscale() {
           u8 pad = rdx*10 + cdx;
           color curColor = dimPink;
           grid_func[pad] = &SetModal;
-          if ( pad == conv64toGrid(modal) ) {
+          if ( pad == conv64toGrid(memory_store[MEM_SCALE]) ) {
             grid_params[pad].p1 = 1;
             curColor.r *= 4;
             curColor.g *= 4;
@@ -347,7 +368,7 @@ void build_keyscale() {
         u8 pad = 80 + odx;
         color curColor = dimGold;
         grid_func[pad] = &SetOffset;
-        if ( scaleOffset == odx-1 ) {
+        if ( memory_store[MEM_OFFSET_STATE] == odx-1 ) {
           grid_params[pad].p1 = 1;
           curColor.r *= 4;
           curColor.g *= 4;
@@ -362,7 +383,7 @@ void build_keyscale() {
         u8 pad = 70 + hdx;
         color curColor = dimGreen;
         grid_func[pad] = &SetHideNonscale;
-        if ( hideNonscale == hdx-1 ) {
+        if ( memory_store[MEM_SCALE_STATE_ACTIVE] == hdx-1 ) {
           grid_params[pad].p1 = 1;
           curColor.r *= 4;
           curColor.g *= 4;
@@ -377,7 +398,7 @@ void build_keyscale() {
         u8 pad = vdx*10;
         color curColor = dimBlue;
         grid_func[pad] = &SetVelocityCurve;
-        if ( velocityCurve == vdx-1 ) {
+        if ( memory_store[MEM_VELOCITY] == vdx-1 ) {
           grid_params[pad].p1 = 1;
           curColor.r *= 4;
           curColor.g *= 4;
@@ -398,6 +419,11 @@ void build_scaleplay() { // also handle 7 overlap modes
     u8 scalecounter = 1;  // the step in the current modal-scale, esp. for when hideNonscale is 1(true)
     u8 chromaticcounter = 0; // more for not hideNonscale (= 0)
     u8 octavecounter = 0; // also integrate octave selector from other Systems into this one.
+
+    // get color of non-root based on memory_store[MEM_COLOR_SCHEME]
+    color noteColor = colorRanger(memory_store[MEM_COLOR_SCHEME]* 6, 4);
+    color rootColor = colorRanger(memory_store[MEM_COLOR_SCHEME]* 6, 5);
+
     for ( u8 rdx = 1; rdx < 9; rdx++ ) {  // row/column may be better
       for ( u8 cdx = 1; cdx < 9; cdx++ ) {
           //the way the scale mode works: 0 offset = octaves stacked vertically (in most cases)
@@ -409,13 +435,13 @@ void build_scaleplay() { // also handle 7 overlap modes
           grid_func[pad] = &DoNoteMarked;
           grid_pres[pad] = &AftertouchGeneral;
           grid_params[pad].p1 = 0;  // this is the midi channel TODO add changer for channel
-          if (hideNonscale == 0) {
+          if (memory_store[MEM_SCALE_STATE_ACTIVE] == 0) {
               grid_params[pad].p2 = totalpadcounter; // found out if not scale mode the layout is always the same on factory
               if ( chromaticcounter == 0 ) {
-                change_color(pad, 33,33,33); // TODO: maybe make this color configurable too.
+                change_color(pad, rootColor.r, rootColor.g, rootColor.b); 
               } else if ( chromaticcounter == 2 || chromaticcounter == 4 || chromaticcounter == 5 || chromaticcounter == 7 ||
                           chromaticcounter == 9 || chromaticcounter == 11 ) {
-                change_color(pad, 5, 30, 35); // TODO: make this color configurable!
+                change_color(pad, noteColor.r, noteColor.g, noteColor.b); 
               } else {
                 change_color(pad, 0,0,0);
               }
@@ -424,15 +450,15 @@ void build_scaleplay() { // also handle 7 overlap modes
                 chromaticcounter = 0;
               }
               totalpadcounter++;
-          } else if (hideNonscale == 1) {  // "Scale State"
-              grid_params[pad].p2 = scales[modal][scalecounter] + octavecounter*12;
+          } else if (memory_store[MEM_SCALE_STATE_ACTIVE] == 1) {  // "Scale State"
+              grid_params[pad].p2 = scales[memory_store[MEM_SCALE]][scalecounter] + octavecounter*12;
               if (scalecounter == 1) {  // root note color
-                change_color(pad, 33,33,33);  // TODO: maybe make this color configurable too.
+                change_color(pad, rootColor.r, rootColor.g, rootColor.b); 
               } else {
-                change_color(pad, 5, 30, 35);  // TODO: make this color configurable!
+                change_color(pad, noteColor.r, noteColor.g, noteColor.b);  
               }
               scalecounter++;
-              if ( scalecounter > scales[modal][0] ) {
+              if ( scalecounter > scales[memory_store[MEM_SCALE]][0] ) {
                 octavecounter++;
                 scalecounter = 1;
               }
@@ -442,9 +468,9 @@ void build_scaleplay() { // also handle 7 overlap modes
       octavecounter = rdx; // base setup with no offset
       scalecounter = 1; // base setup with no offset
       s8 adjust = 0; // backwards counting mechanism for doing offset.
-      if ( scaleOffset > 0 ) {  // if any offset then...
+      if ( memory_store[MEM_OFFSET_STATE] > 0 ) {  // if any offset then...
         octavecounter--;  // lower octave
-        adjust = scales[modal][0] + 1 - scaleOffset * (rdx);  // go to last note in scale and progressively back from that
+        adjust = scales[memory_store[MEM_SCALE]][0] + 1 - memory_store[MEM_OFFSET_STATE] * (rdx);  // go to last note in scale and progressively back from that
         recursiveAdjust(&adjust, &octavecounter);  // made this recursive because on shorter scales it got used a lot more than anticipated
         scalecounter = adjust;  // commit final result to scalecounter
       }
@@ -579,15 +605,48 @@ void build_aftertouch() {
     build_keyscale_header_footer();
 }
 
+
+
+void build_colorscheme() {
+    clear_keyscale();
+
+    color dimRed = {11,0,0};
+
+    for ( u8 rdx = 7; rdx < 9; rdx++ ) {  // This is for selecting the Color Scheme for Keyscale. 16 Options for Color Schemes
+      for ( u8 cdx = 1; cdx < 9; cdx++ ) {
+          u8 pad = rdx*10 + cdx;
+          color curColor = dimRed;
+          grid_func[pad] = &SetColorScheme;
+          if ( pad == conv64toGrid(memory_store[MEM_COLOR_SCHEME] + 48)  ) {
+            grid_params[pad].p1 = 1;
+            curColor.r *= 4;
+            curColor.g *= 4;
+            curColor.b *= 4;
+          } else {
+            grid_params[pad].p1 = 0;
+          }
+          grid_params[pad].p2 = convGridto64(pad) - 48; // this tells the function to set the mode to the right one
+          change_color(pad, curColor.r, curColor.g, curColor.b);
+      }
+    }
+    
+    build_keyscale_header_footer();
+}
+
+
+
+
 void build_keyscale_header_footer() {
     grid_func[96] = &SetSubStatePlay;
     change_color(96, 0, 12, 44);
     grid_func[98] = &SetSubStateUser;
     change_color(98, 30, 20, 0);
-    grid_func[7] = &SetSubStateSends;
-    change_color(7, 5, 10, 0);
     grid_func[6] = &SetSubStateAftertouch;
     change_color(6, 8, 0, 10);
+    grid_func[7] = &SetSubStateSends;
+    change_color(7, 5, 10, 0);
+    grid_func[8] = &SetSubStateColorScheme;
+    change_color(8, 11, 0, 0);
     rowset_octave_state_etc();
 }
 
@@ -595,7 +654,7 @@ void build_keyscale_header_footer() {
 void recursiveAdjust(s8 *adj, u8 *oct) {
   if (*adj < 1) {
     *oct = *oct - 1; // some scales are short enough going back 2 octaves is heard of...
-    *adj = scales[modal][0] + *adj; // if so, continue counting thru scale backwards
+    *adj = scales[memory_store[MEM_SCALE]][0] + *adj; // if so, continue counting thru scale backwards
     recursiveAdjust(adj, oct);
   }
 }
@@ -604,9 +663,9 @@ void recursiveAdjust(s8 *adj, u8 *oct) {
 // u8 pad = rdx*10 + cdx;
 // grid_func[pad] = &DoNote;
 // grid_params[pad].p1 = 0;  // this is the midi channel
-// if (hideNonscale == 0) {
+// if (memory_store[MEM_SCALE_STATE_ACTIVE] == 0) {
 //   grid_params[pad].p2 = totalpadcounter; // only this simple if not hideNonscale
-// } else if (hideNonscale == 1) {
+// } else if (memory_store[MEM_SCALE_STATE_ACTIVE] == 1) {
 //   grid_params[pad].p2 = octavecounter + scales[modal][scalecounter];
 // }
 // if ( scalecounter >= scales[modal][0] ) {
@@ -622,7 +681,7 @@ void recursiveAdjust(s8 *adj, u8 *oct) {
 //   change_color(pad, 0,0,0);
 // }
 //
-// if (hideNonscale == 0) {
+// if (memory_store[MEM_SCALE_STATE_ACTIVE] == 0) {
 //   chromaticcounter++;
 //   if ( scales[modal][scalecounter+1] == chromaticcounter ) {
 //     scalecounter++;
@@ -631,7 +690,7 @@ void recursiveAdjust(s8 *adj, u8 *oct) {
 //     chromaticcounter = 0;
 //     octavecounter++;
 //   }
-// } else if (hideNonscale == 1) {
+// } else if (memory_store[MEM_SCALE_STATE_ACTIVE] == 1) {
 //   scalecounter++;
 //   chromaticcounter = scales[modal][scalecounter];
 // }
@@ -647,7 +706,7 @@ void state_keyscale(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_ENTER:
       current_state = LP_KEYSCALE_STATE;
-      memory_store[0] = LP_KEYSCALE_STATE;
+      memory_store[MEM_LAST_STATE] = LP_KEYSCALE_STATE;
       hal_write_flash(0, memory_store, 30);
       build_keyscale();
       break;
@@ -659,9 +718,6 @@ void state_keyscale(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_REDRAW:
       build_scaleplay();
-      // a new addition 1/1/2019 - based on Octave Change - draw in red notes for those exceeding midi note range
-      
-      //redraw_surface();
       break;
     case EVENT_CLOCK:
     case EVENT_MSG_COUNT:

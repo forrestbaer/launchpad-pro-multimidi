@@ -251,6 +251,16 @@ void NullFunction(u8 index, u8 value) {
     return; //Do nothing! But receives parameters to avoid error.
 }
 
+void NullFuncExceptOff(u8 index, u8 value) {
+  if (value == 0) {
+    if ( heldnotes[index].note != -1 ) {
+      midi_note(heldnotes[index].channel, heldnotes[index].note, value);
+    }
+    heldnotes[index].note = -1;
+    heldnotes[index].channel = -1;
+  }
+}
+
 u8 pianoDraw(u8 interval) {
   // sequential placement of the next key in the keyboard/piano
 

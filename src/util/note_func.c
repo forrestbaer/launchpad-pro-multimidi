@@ -44,7 +44,7 @@ void DropLight(u8 index, u8 value) {
 
 void DoNote(u8 index, u8 value) {
     if (value > 0) {
-        u8 note = grid_params[index].p2 + octave[0] * 12 + keyscale;
+        u8 note = grid_params[index].p2 + octave[0] * 12 + memory_store[MEM_KEY];
         midi_note(grid_params[index].p1, note, value);
         heldnotes[index].note = note;  // heldnotes creates a management system for notes on and off that better handles change
         heldnotes[index].channel = grid_params[index].p1;
@@ -60,19 +60,48 @@ void DoNote(u8 index, u8 value) {
     }
 }
 
+void DoNoteMicrotonal(u8 index, u8 value) {
+    if (value > 0) {
+        s8 small_octave_adjust = 0; // doing this because the really small count microtonal were not getting low enough
+        // it is a compromise because I am not changing the whole octave system over this.
+        if (microtonal_count < 11) {
+            small_octave_adjust = -1;
+        }
+        if (microtonal_count < 7) {
+            small_octave_adjust = -3;
+        }
+        if (microtonal_count < 5) {
+            small_octave_adjust = -5;
+        }
+        s8 note = grid_params[index].p2 + (octave[0] + small_octave_adjust) * microtonal_count;
+        if (note < 0) { note = 0; }
+        midi_note(grid_params[index].p1, note, value);
+        heldnotes[index].note = note;  // heldnotes creates a management system for notes on and off that better handles change
+        heldnotes[index].channel = grid_params[index].p1;
+    } else {
+        if ( heldnotes[index].note != -1 ) {
+          midi_note(heldnotes[index].channel, heldnotes[index].note, value);
+        }
+        heldnotes[index].note = -1;
+        heldnotes[index].channel = -1;
+    }
+    DropLight(index, value);
+}
+
 void DoNoteMarked(u8 index, u8 value) { // like DoNote but for marking any other key with the same note as the one pressed
     if (value > 0) {
-        u8 note = grid_params[index].p2 + octave[0] * 12 + keyscale;
+        color hitColor = colorRanger(memory_store[MEM_COLOR_SCHEME]* 6, 6);
+        u8 note = grid_params[index].p2 + octave[0] * 12 + memory_store[MEM_KEY];
         midi_note(grid_params[index].p1, note, value);
         heldnotes[index].note = note;  // heldnotes creates a management system for notes on and off that better handles change
         heldnotes[index].channel = grid_params[index].p1;
         //scan all grid_params[xxx].p2 for those with equal note and color them and this one green
         for ( u8 mdx = 0; mdx < 64; mdx++ ) {
             if ( grid_params[conv64toGrid(mdx)].p2 == grid_params[index].p2 ) {
-              hal_plot_led(TYPEPAD, conv64toGrid(mdx), 3, 33, 3); // give temporary color
+              hal_plot_led(TYPEPAD, conv64toGrid(mdx), hitColor.r, hitColor.g, hitColor.b); // give temporary color
             }
         }
-        hal_plot_led(TYPEPAD, index, 3, 33, 3); // give temporary color
+        hal_plot_led(TYPEPAD, index, hitColor.r, hitColor.g, hitColor.b); // give temporary color
     } else {
         if ( heldnotes[index].note != -1 ) {
           midi_note(heldnotes[index].channel, heldnotes[index].note, value);
@@ -109,7 +138,7 @@ void FixedNote(u8 index, u8 value) {  // Hard - fixed note that doesn't care abo
 
 void McpNote(u8 index, u8 value) {
     if (value > 0) {
-        u8 note = grid_params[index].p2 + keyscale;
+        u8 note = grid_params[index].p2 + memory_store[MEM_KEY];
         if ( index < 50 ) {
           note += octave[1] * 12;
           midi_note(mcpSet1, note, value);
@@ -221,15 +250,28 @@ void CircuitDrum(u8 index, u8 value) {
 
 
 void CircuitChromaticSample(u8 index, u8 value) {
-
-    // u8 staggereddrum[4] = {60,62,64,65};
-    // u8 patchselect[4] = {8,18,44,50};
     if ( value > 0 ) {
         midi_cc(9, 14, grid_params[index].p2);
         midi_note(9, 60, value);  // the NOTE OFF's are going to be off here. Another reason to need the Held Note Manager!
         heldnotes[index].note = 60;
         heldnotes[index].channel = 9;
-
+        DropLight(index, value);
+    } else {
+        if ( heldnotes[index].note != -1 ) {
+          midi_note(heldnotes[index].channel, heldnotes[index].note, value);
+        }
+        heldnotes[index].note = -1;
+        heldnotes[index].channel = -1;
+    }
+}
+// for expansion: the other CCs are Drum3&4...46....55
+// the midi note also changes: I think it is  64 and 65
+void CircuitChromaticSample2(u8 index, u8 value) {
+    if ( value > 0 ) {
+        midi_cc(9, 34, grid_params[index].p2);
+        midi_note(9, 62, value);  // the NOTE OFF's are going to be off here. Another reason to need the Held Note Manager!
+        heldnotes[index].note = 62;
+        heldnotes[index].channel = 9;
         DropLight(index, value);
     } else {
         if ( heldnotes[index].note != -1 ) {
@@ -240,4 +282,46 @@ void CircuitChromaticSample(u8 index, u8 value) {
     }
 }
 
+void CircuitMicrotonalSet(u8 index, u8 value) {
+    if ( value > 0 ) {
+        microtonal_count = grid_params[index].p2;
+        for ( u8 cdx = 0; cdx < 32; cdx++) {
+            grid_params[conv64toGrid(cdx)].p1 = 0;   
+            change_color(conv64toGrid(cdx), 11,11,11 );
+        }
+        grid_params[index].p1 = 1;
+        change_color(index, 44,44,44);
+        // then change the number of pads above that allow notes within the microtonal to be on or off
+        for ( u8 cdx = 0; cdx < 32; cdx++) {
+            bool isOn = true;
+            if ( cdx >= microtonal_count ) {
+                isOn = false;
+            }
+            color c = { 11 * isOn, 22 * isOn, 44 * isOn };
+            change_color(conv64toGrid(cdx+32), c.r,c.g,c.b);
+            if (isOn && microtonal_notes_on[cdx] == 0) {
+                change_color(conv64toGrid(cdx+32), 44, 0, 0);
+            }
+        }
+    }
+}
 
+void CircuitMicrotonalNotes(u8 index, u8 value) {
+    if ( value > 0 ) {
+        s8 step = convGridto64(index) - 32;
+        if (step < 0) { step = 0;}
+        if (step > 31) { step = 31;}
+        if (step + 1 <= microtonal_count) {
+            if ( step == 0 ) { return; } // disallow shunting of root note. test this theory.
+            if (microtonal_notes_on[step] == 0) {
+                microtonal_notes_on[step] = 1;
+                grid_params[index].p1 = 1;
+                change_color(index, 11,22,44);
+            } else {
+                microtonal_notes_on[step] = 0;
+                grid_params[index].p1 = 0;
+                change_color(index, 44,0,0);
+            }
+        }
+    }
+}

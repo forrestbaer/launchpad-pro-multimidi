@@ -30,11 +30,9 @@ extern GridParams grid_params[BUTTON_COUNT]; // this holds each pad's parameters
 extern heldnote heldnotes[BUTTON_COUNT]; //any note goes in, NOTEOFF comes from this... for octave change, complex manipulations, etc.
   //now keeps track of multiple octave controls!!
 extern u8 octave[2];  // octave 2 is like C0 a.k.a. midi note 24 (easier math, no negatives). By default octave is set to 5 which = Middle C (C3) midi note 60
-extern u8 keyscale; // 0 is C, 1 is C#, etc.  Why? Many "Instruments" are in a scale and this allows different scales
-extern u8 modal; // see diatonic.c for a list of the scales/modes that line up to this
-extern u8 scaleOffset;  // like offset on LPP factory scale mode. 0 = ? no offset just natural note progression, 7 = octaves lined up??
-extern u8 hideNonscale; // 0 = original LPP before scale mode, 1 = scale mode, may add more types
-extern u8 velocityCurve; 
+// see diatonic.c for a list of the scales/modes that line up to modal memory_store[MEM_SCALE]
+// memory_store[MEM_OFFSET_STATE] =  like offset on LPP factory scale mode. 0 = ? no offset just natural note progression, 7 = octaves lined up??
+// memory_store[MEM_SCALE_STATE_ACTIVE] 0 = original LPP before scale mode, 1 = scale mode, may add more types
 extern u8 selectedSlot;
 extern u8 mcpSet1;
 extern u8 mcpSet2; // 2 groups of settings for channel options for the MCP mode
@@ -42,6 +40,7 @@ extern u8 mcpSet2; // 2 groups of settings for channel options for the MCP mode
 void exit_surface();
 void change_color(u8 index, u8 r, u8 g, u8 b);
 void red_notes();
+void red_notes_microtonal();
 void redraw_surface();
 void prep_surface();
 

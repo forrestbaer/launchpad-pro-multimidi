@@ -208,6 +208,8 @@ extern u8 memory_store[30];
 extern u8 aft_cc_ones;
 extern u8 aft_cc_tens;
 extern u8 aft_cc_hundreds;
+extern u8 microtonal_count;
+extern u8 microtonal_notes_on[32];
 
 typedef enum
 {
@@ -237,6 +239,7 @@ typedef enum
     MEM_VINST_SLOT14,
     MEM_VINST_SLOT15,
     MEM_VINST_SLOT16,
+    MEM_COLOR_SCHEME,
     MEM_NUM
 } memory_slots;
 

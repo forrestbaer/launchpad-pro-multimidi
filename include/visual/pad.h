@@ -112,6 +112,7 @@ void Pressure(u8 setting, u8 index, u8 value);
 void FilledPressure(u8 index, u8 value);
 
 void NullFunction(u8 index, u8 value);
+void NullFuncExceptOff(u8 index, u8 value);
 
 u8 pianoDraw(u8 interval);
 

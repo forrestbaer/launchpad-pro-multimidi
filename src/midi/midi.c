@@ -14,7 +14,7 @@ void midi_usb(u8 status, u8 data1, u8 data2) {
 u8 velocity_adjust (u8 value) {
     u8 adj = 0;
     if (value == 0) { return 0; }
-    switch(velocityCurve) {
+    switch(memory_store[MEM_VELOCITY]) {
       case 0:
         return value;
       break;

@@ -14,11 +14,6 @@ void (*grid_pres[BUTTON_COUNT])(u8, u8) = {NULL};
 GridParams grid_params[BUTTON_COUNT] = {{0,0,0,0,0,0,0,0}};
 heldnote heldnotes[BUTTON_COUNT] = {{-1,-1,-1,-1}}; // -1 means no note held, otherwise note held
 u8 octave[2] = {5,5};
-u8 keyscale = 0;
-u8 modal = 8;
-u8 scaleOffset = 0;
-u8 hideNonscale = 0;
-u8 velocityCurve = 0;
 u8 selectedSlot = 0;
 u8 mcpSet1 = 0;
 u8 mcpSet2 = 0;
@@ -40,10 +35,32 @@ void red_notes() {
     // see if notes are outside the range of valid midi notes (based on octave) and draw red if < 0 or > 127
     for ( u8 cdx = 1; cdx < 9; cdx++ ) {
         for ( u8 rdx = 1; rdx < 9; rdx++ ) {
-            u8 note =  grid_params[rdx*10+cdx].p2 + octave[0] * 12 + keyscale;
+            u8 note =  grid_params[rdx*10+cdx].p2 + octave[0] * 12 + memory_store[MEM_KEY];
             if (note < 0 || note > 127) {
-                change_color(rdx*10+cdx, 50, 0, 0);
-                grid_func[rdx*10+cdx] = &NullFunction;  // have to see if this will go back once octave range is good again.
+                if ( memory_store[MEM_COLOR_SCHEME] != 0 ) {
+                    change_color(rdx*10+cdx, 50, 0, 0);
+                } else {
+                    change_color(rdx*10+cdx, 63, 20, 0);
+                }
+                grid_func[rdx*10+cdx] = &NullFuncExceptOff;  // have to see if this will go back once octave range is good again.
+                // 
+            }
+        }
+    }
+}
+
+void red_notes_microtonal() {
+    // see if notes are outside the range of valid midi notes (based on octave) and draw red if < 0 or > 127
+    for ( u8 cdx = 1; cdx < 9; cdx++ ) {
+        for ( u8 rdx = 1; rdx < 9; rdx++ ) {
+            u8 note =  grid_params[rdx*10+cdx].p2 + octave[0] * microtonal_count;
+            if (note < 0 || note > 127) {
+                if ( memory_store[MEM_COLOR_SCHEME] != 0 ) {
+                    change_color(rdx*10+cdx, 50, 0, 0);
+                } else {
+                    change_color(rdx*10+cdx, 63, 20, 0);
+                }
+                grid_func[rdx*10+cdx] = &NullFuncExceptOff;  // have to see if this will go back once octave range is good again.
             }
         }
     }

@@ -23,7 +23,7 @@ void state_play(StateEvent msg, u8 index, u8 value) {
   }
   if (msg == EVENT_ENTER) {
     current_state = LP_PLAY_STATE; // for side queries of state...timer?
-    memory_store[0] = LP_PLAY_STATE;
+    memory_store[MEM_LAST_STATE] = LP_PLAY_STATE;
     hal_write_flash(0, memory_store, 30);
     prep_surface();
     return;

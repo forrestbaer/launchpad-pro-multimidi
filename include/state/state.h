@@ -71,7 +71,7 @@ void StateCircuitpad(u8 index, u8 value);
 void StateKeyscale(u8 index, u8 value);
 void StateDigitonepad(u8 index, u8 value);
 
-extern LpState current_state; // What State the program is in
+extern LpState current_state; // What State the program is in (the one not saved to memory but often the same as that)
 
 extern void (*stateMachine)(StateEvent, u8, u8);
 

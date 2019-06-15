@@ -42,7 +42,7 @@ void state_scalearp(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_ENTER:
       current_state = LP_SCALEARP_STATE;
-      memory_store[0] = LP_SCALEARP_STATE;
+      memory_store[MEM_LAST_STATE] = LP_SCALEARP_STATE;
       hal_write_flash(0, memory_store, 30);
       build_scale_arp();
       break;

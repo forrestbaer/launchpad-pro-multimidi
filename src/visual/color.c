@@ -43,6 +43,63 @@ color colorRanger(u8 input, u8 type) {
           rtnColor.b = 63 - (input / 2);
           rtnColor.r = 63;
         break;
+        case 4: // DIMMER r to y to g to cyan to b to p to r...!! :)
+            if ( input < 32 ) {
+              rtnColor.r = (63 - input * 2) / 2;
+              rtnColor.g = input;
+              rtnColor.b = 0;
+            } else if ( input >= 32 && input < 63 ) {
+              rtnColor.r = 0;
+              rtnColor.g = (63 - (input - 32)) / 2;
+              rtnColor.b = (input - 32);
+            } else if ( input >= 63 && input < 95 ) {
+              rtnColor.r = (input - 63);
+              rtnColor.g = 0;
+              rtnColor.b = (63 - (input - 63)) / 2;
+            } else {
+              rtnColor.r = 33;
+              rtnColor.g = 0;
+              rtnColor.b = 0;
+            }
+        break;
+        case 5: // DIM white-tinted with r to y to g to cyan to b to p to r...!! :) offset of type 2
+            if ( input < 32 ) {
+              rtnColor.g = (63 - input * 2) / 2;
+              rtnColor.b = input;
+              rtnColor.r = 33;
+            } else if ( input >= 32 && input < 63 ) {
+              rtnColor.g = 33;
+              rtnColor.b = (63 - (input - 32)) / 2;
+              rtnColor.r = (input - 32);
+            } else if ( input >= 63 && input < 95 ) {
+              rtnColor.g = (input - 63);
+              rtnColor.b = 33;
+              rtnColor.r = (63 - (input - 63)) / 2;
+            } else {
+              rtnColor.g = 33;
+              rtnColor.b = 33;
+              rtnColor.r = 33;
+            }
+        break;
+        case 6: // DIMMER (OFFSET) r to y to g to cyan to b to p to r...!! :)
+            if ( input < 32 ) {
+              rtnColor.b = (63 - input * 2) / 2;
+              rtnColor.r = input;
+              rtnColor.g = 0;
+            } else if ( input >= 32 && input < 63 ) {
+              rtnColor.b = 0;
+              rtnColor.r = (63 - (input - 32)) / 2;
+              rtnColor.g = (input - 32);
+            } else if ( input >= 63 && input < 95 ) {
+              rtnColor.b = (input - 63);
+              rtnColor.r = 0;
+              rtnColor.g = (63 - (input - 63)) / 2;
+            } else {
+              rtnColor.b = 33;
+              rtnColor.g = 0;
+              rtnColor.b = 0;
+            }
+        break;
         default:
 
         break;

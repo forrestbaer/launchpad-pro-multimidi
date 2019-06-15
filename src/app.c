@@ -64,11 +64,7 @@ u8 memory_store[30] = { 0,0,0,0,0,5,5,0,0,0,
                         0,1,2,3,4,5,6,7,8,9,
                         10,11,12,13,14,15,0,0,0,0,
                         };
-
-u8 aft_cc_ones = 1;
-u8 aft_cc_tens = 0;
-u8 aft_cc_hundreds = 0;
-/* 30 u8 slots to store only the important settings for recall of the last state of the OpenLaunch
+/* 30 u8 slots to store only the important settings for recall of the last state and settings of the OpenLaunch
 0 = last state
 1 = Key
 2 = Scale
@@ -80,7 +76,19 @@ u8 aft_cc_hundreds = 0;
 8 = Aftertouch (0 off, 1 channel, 2 poly, 100+ map to CC by subtract 100= CC#)
 9 = last sub-state
 10 - 25 "Virtual Instrument" slots 1 thru 16 to assign midi channels
+26 = Color Scheme
 */
+u8 aft_cc_ones = 1;
+u8 aft_cc_tens = 0;
+u8 aft_cc_hundreds = 0;
+u8 microtonal_count = 12;
+u8 microtonal_notes_on[32] = { 
+    1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1
+};
+
 
 //______________________________________________________________________________
 
@@ -184,25 +192,22 @@ void app_init(const u16 *adc_raw)
 {
     memory_store[MEM_OCTAVE1] = 5;
     memory_store[MEM_OCTAVE2] = 5; // default octaves
+    memory_store[MEM_SCALE] = 8; // default mode/scale
+    memory_store[MEM_LAST_STATE] = LP_PLAY_STATE;
 
     // load in the stored memory
     hal_read_flash(0, memory_store, 30);
-
     prep_surface();
 
     // load the memory_store into the appropriate variables
-    // TODO... with enum making it clearer, these variables could go away I think
-    current_state = memory_store[MEM_LAST_STATE];
-    keyscale = memory_store[MEM_KEY];
-    modal = memory_store[MEM_SCALE];
-    scaleOffset = memory_store[MEM_OFFSET_STATE];
-    hideNonscale = memory_store[MEM_SCALE_STATE_ACTIVE];
-    velocityCurve = memory_store[MEM_VELOCITY];
+    current_state = memory_store[MEM_LAST_STATE];  // current state is held separate from memory_store[MEM_LAST_STATE] because...
+    // ...some current_state do not want to be saved to memory
+
+    microtonal_count = 11;
 
     aft_cc_ones = memory_store[MEM_AFTERTOUCH] % 10;
     aft_cc_tens = (memory_store[MEM_AFTERTOUCH] % 100) / 10;
     aft_cc_hundreds = memory_store[MEM_AFTERTOUCH] / 100;
 
     StateFunc(memory_store[MEM_LAST_STATE], 0, 0);
-
 }

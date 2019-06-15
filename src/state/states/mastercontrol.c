@@ -3,7 +3,8 @@
 #include "visual/columnset.h"
 #include "visual/rowset.h"
 #include "util/note_func.h"
-#include "util/octave.h"
+#include "util/octave.h" 
+#include "music/kill.h"
 
 // Master Control Pads - a performance system for controlling all midi devices connected to the LPP
 
@@ -57,7 +58,7 @@ void build_drumbrute_impact() {  // in the upper half always, for now.
       for ( u8 rdx = 1; rdx < 9; rdx++ ) {
         grid_params[cdx*10+rdx].p2 = 0;
         change_color(cdx*10+rdx, 0, 0, 0);
-        grid_func[cdx*10+rdx] = &NullFunction;
+        grid_func[cdx*10+rdx] = &NullFuncExceptOff;
       }
     }
     for ( u8 idx = 1; idx < 9; idx++ ) {
@@ -150,7 +151,7 @@ void state_mastercontrol(StateEvent msg, u8 index, u8 value) {
       break;
     case EVENT_ENTER:
       current_state = LP_MASTERCONTROL_STATE;
-      memory_store[0] = LP_MASTERCONTROL_STATE;
+      memory_store[MEM_LAST_STATE] = LP_MASTERCONTROL_STATE;
       hal_write_flash(0, memory_store, 30);
       build_mastercontrol();
       break;

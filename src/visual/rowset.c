@@ -53,3 +53,46 @@ void rowset_circuit_sampletune(u8 base, u8 padbase) {  //(idx, 81 - idx * 10);
         change_color(padbase + adx, c.r, c.g, c.b );
     }
 }
+
+void rowset_microtonal_setup(u8 base, u8 padbase) {  
+    for (u8 adx = 0; adx < 8; adx++) {
+        color c = {11,11,11};
+        u8 note_calc = base * 8 + adx + 1;
+        if ( padbase + adx == conv64toGrid(microtonal_count - 1)  ) {
+            grid_params[padbase + adx].p1 = 1;
+            c.r *= 4;
+            c.g *= 4;
+            c.b *= 4;
+        } else {
+            grid_params[padbase + adx].p1 = 0;
+        }
+        grid_params[padbase + adx].p2 = note_calc;
+        grid_func[padbase + adx] = &CircuitMicrotonalSet;
+        grid_pres[padbase + adx] = &NullFunction;
+        change_color(padbase + adx, c.r, c.g, c.b );
+    }
+}
+
+void rowset_microtonal_notes(u8 base, u8 padbase) {  
+    for (u8 adx = 0; adx < 8; adx++) {
+        u8 isOn = 1;
+        u8 note_calc = base * 8 + adx;
+        if ( note_calc >= microtonal_count ) {
+            isOn = 0;
+        }
+        color c = { 11 * isOn, 
+                    22 * isOn,
+                    44 * isOn
+                  };
+        grid_params[padbase + adx].p1 = microtonal_notes_on[note_calc];
+        grid_params[padbase + adx].p2 = note_calc;
+        grid_func[padbase + adx] = &CircuitMicrotonalNotes;
+        grid_pres[padbase + adx] = &NullFunction;
+        if (isOn && microtonal_notes_on[note_calc] == 0) {
+            c.r = 44;
+            c.g = 0;
+            c.b = 0;
+        }
+        change_color(padbase + adx, c.r, c.g, c.b );
+    }
+}
