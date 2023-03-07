@@ -4,8 +4,6 @@
 #include "app.h"
 #include "visual/color.h"
 
-u8 roundrobin;
-
 void MakeStar(u8 index, u8 value);
 void DropRock(u8 index, u8 value);
 void DropLight(u8 index, u8 value);
